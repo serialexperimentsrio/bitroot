@@ -1,0 +1,58 @@
+{
+	"$baseURI": "https://yal.cc/r/20/pixelfont/",
+	"$version": "1.0",
+	"in-glyphs": [
+		"AaBbCcDdEeFfGgHh",
+		"IiJjKkLlMmNnOoPp",
+		"QqRrSsTtUuVvWwXx",
+		"YyZz.,!?'\":; ",
+		"0123456789"
+	],
+	"glyph-color": "auto",
+	"glyph-width": 5,
+	"glyph-height": 10,
+	"glyph-ofs-x": 1,
+	"glyph-ofs-y": 1,
+	"glyph-sep-x": 2,
+	"glyph-sep-y": 1,
+	"glyph-base-x": 0,
+	"glyph-baseline": 7,
+	"glyph-spacing": 1,
+	"font-is-mono": false,
+	"font-em-square": 128,
+	"font-line-gap": 192,
+	"font-ascend": 224,
+	"font-descend": -96,
+	"font-px-size": 32,
+	"contour-type": "pixel",
+	"font-type": "ttf",
+	"font-is-upper": false,
+	"font-name": "Bitroot",
+	"font-author": "Rio",
+	"font-copy": "Copyright (c) 2025, Rio (engineer@disroot.org)",
+	"font-version-major": 1,
+	"font-version-minor": 0,
+	"font-desc": "  Hand-pixeled typeface/font that combines classic retro charm within a compact 5×10 grid",
+	"font-license": "SIL Open Font License",
+	"font-license-url": "",
+	"font-sample-text": [
+		"Jived fox nymph grabs quick waltz bold vexing zebra"
+	],
+	"font-embedding": "4",
+	"font-weight-class": "400",
+	"font-width-class": "5",
+	"font-creation-date": "2025-05-28",
+	"font-creation-time": "00:02",
+	"font-modification-date": "2025-05-29",
+	"font-modification-time": "22:33",
+	"font-modification-auto": true,
+	"overrides": [
+		"# hide the pixels of the \"space\" characters!",
+		"# (but they'll still have a width)",
+		"hide \\s",
+		""
+	],
+	"font-preview-text": [
+		"Hit ya' with the hard punk tactics"
+	]
+}
