@@ -1,7 +1,7 @@
 # Bitroot
 
 <div style="text-align: center;">
-    <img src="./Preview%20(Upscaled%201000%25).png" alt="Bitroot Typeface Preview" style="max-width: 75%; height: 75%;">
+    <img src="preview.png" alt="Bitroot Typeface Preview" style="max-width: 75%; height: 75%;">
     <p><b>5×10 px proportions per glyph, 7 px to baseline.</b></p>
 </div>
 
