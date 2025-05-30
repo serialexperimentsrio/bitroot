@@ -26,7 +26,7 @@ Please keep the commit messages imperative in grammar with proper casing.
 
 1. Edit `bitroot-typeface.aseprite` in [Aseprite](https://www.aseprite.org/)
 2. Export updated font sheet as `font-sheet.png` (scale as 100%)
-3. Pick the image `font-sheet.png` on [PixelFont](https://yellowafterlife.itch.io/pixelfont) and and import settings via `pixelfont-settings.json`
+3. Pick the image `font-sheet.png` on [PixelFont](https://yellowafterlife.itch.io/pixelfont) and import settings via `pixelfont-settings.json`
 3. Generate the font as scalable `ttf` or `otf` format
 4. Submit PR with updated `bitroot-typeface.aseprite`, font files, and JSON (if modified)
 
