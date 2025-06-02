@@ -1,9 +1,10 @@
 # Bitroot
 
-<div style="text-align: center;">
-    <img src="preview.png" alt="Bitroot Typeface Preview" style="max-width: 75%; height: 75%;">
-    <p><b>5×10 px proportions per glyph, 7 px to baseline.</b></p>
-</div>
+<p align="center">
+  <img src="preview.png" alt="Bitroot Typeface Preview" width="75%">
+</p>
+
+<p align="center"><b>5×10 px proportions per glyph, 7 px to baseline.</b></p>
 
 **Bitroot** typeface was designed using [Aseprite](https://www.aseprite.org/) and then exported to [PixelFont](https://yellowafterlife.itch.io/pixelfont) for font generation.
 
@@ -32,4 +33,4 @@ Please keep the commit messages imperative in grammar with proper casing.
 
 ## License
 
-[SIL Open Font License 1.1](https://scripts.sil.org/OFL)
+This font is under [SIL Open Font License 1.1](LICENSE.txt)
