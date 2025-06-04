@@ -5,13 +5,13 @@
 		"AaBbCcDdEeFfGgHh",
 		"IiJjKkLlMmNnOoPp",
 		"QqRrSsTtUuVvWwXx",
-		"YyZz.,!?'\":; ",
-		"0123456789"
+		"YyZz  0123456789",
+		".,!?'\":;"
 	],
 	"glyph-color": "auto",
 	"glyph-width": 5,
 	"glyph-height": 10,
-	"glyph-ofs-x": 2,
+	"glyph-ofs-x": 3,
 	"glyph-ofs-y": 2,
 	"glyph-sep-x": 2,
 	"glyph-sep-y": 1,
@@ -32,7 +32,7 @@
 	"font-copy": "Copyright (c) 2025, Rio (engineer@disroot.org)",
 	"font-version-major": 1,
 	"font-version-minor": 0,
-	"font-desc": "",
+	"font-desc": "Sweet fonts to leave your worries behind you",
 	"font-license": "SIL Open Font License 1.1",
 	"font-license-url": "https://github.com/serialexperimentsrio/bitroot/blob/main/LICENSE.txt",
 	"font-sample-text": [
@@ -44,16 +44,14 @@
 	"font-creation-date": "2025-05-28",
 	"font-creation-time": "00:02",
 	"font-modification-date": "2025-06-03",
-	"font-modification-time": "10:34",
+	"font-modification-time": "14:35",
 	"font-modification-auto": true,
 	"overrides": [
 		"# hide the pixels of the \"space\" characters!",
 		"# (but they'll still have a width)",
-		"hide \\s",
-		""
+		"hide \\s"
 	],
 	"font-preview-text": [
-		"",
-		""
+		"The average developer"
 	]
 }
