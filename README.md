@@ -4,20 +4,20 @@
   <img src="preview.png" alt="Bitroot Typeface Preview" width="75%">
 </p>
 
-<p align="center"><b>5×10 px proportions per glyph, 7 px to baseline.</b></p>
+<p align="center"><b>5×10 px dimensions per glyph, 7 px to baseline</b></p>
 
 **Bitroot** typeface was designed using [Aseprite](https://www.aseprite.org/) and then exported to [PixelFont](https://yellowafterlife.itch.io/pixelfont) for font generation.
 
 ## Specifications
 
-- **Box Dimensions (W×H)**: 5×10 px
-- **Glyph width:** 5 px (all alphabet characters)
+- **Grid dimensions**: 5×10 px
 - **Baseline:** 7 px from top
-- **Uppercase height:** 7 px
-- **Lowercase height:** 5 px (in general)
+- **Cap height:** 7 px
+- **X-height:** 5 px (in general)
     - **Ascenders:** Some lowercase characters such as `b, d, f, h, i, j` reach 7px height
     - **Descenders**: Other such lowercase characters such as `g, j, p, q` extend 3px below baseline
-- **Symbols:** Ink width is usually 1-2 px wide, but it may be more within the 5 px gridbox
+- **Effective width:** 5 px (all alphabet and number characters)
+- **Symbols:** Drawn width is typically 1-3 px, but can extend up to the full 5 px
 
 ## Contributing
 
