@@ -1,6 +1,11 @@
 # Bitroot
 
-Bitroot is a pixel typeface designed in [Aseprite](https://www.aseprite.org/) and exported via [PixelFont](https://yellowafterlife.itch.io/pixelfont) for font generation.
+> [!WARNING]
+> This project is a prototype and doesn’t have a stable release yet. Features and design may change.
+
+A **low-res** blocky typeface that I put together in [Aseprite](https://www.aseprite.org/), then exported it to [PixelFont](https://yellowafterlife.itch.io/pixelfont) to generate scalable font files.
+
+ It’s a crisp look for video games and stays readable even at small sizes.
 
 ## Specifications
 
@@ -8,7 +13,7 @@ Bitroot is a pixel typeface designed in [Aseprite](https://www.aseprite.org/) an
   <img src="preview.png" alt="Bitroot Typeface Preview" width="100%">
 </p>
 
-Characters are packed into a **tiny 5×10-pixel area**, and the **baseline** going **7 pixels down from the top**! **Capital letters** use up the full **7-pixel height**, meanwhile regular **lowercases** occupy a **5-pixel x-height** measured from the baseline upward.
+The characters are packed into a **tiny 5×10-pixel area**, **baseline 7 pixels down from the top**! **Capital letters** use up the full **7-pixel height**, meanwhile regular **lowercases** occupy a **5-pixel x-height** measured from the baseline upward.
 
 However, **ascenders** like `b`, `d`, `f`, `h`, `k`, and `l` stretch to match the capitals and **descenders**, `g`, `j`, `p`, `q`, and `y` drop **3 pixels below the baseline** into the remaining lower space. 
 
@@ -25,6 +30,11 @@ Use imperative, properly cased commit messages (e.g., "Add glyph for ampersand")
 3. Pick the image `font-sheet.png` on [PixelFont](https://yellowafterlife.itch.io/pixelfont) and import settings via `pixelfont-settings.json`
 4. Generate the font as scalable `ttf` format
 5. Submit PR with updated `bitroot-typeface.aseprite`, font files, and JSON (if modified)
+
+> [!NOTE]
+> Aseprite is paid software ($19.99 USD), but since the source code is available on GitHub, you can build and install it for free.
+> 
+> [Click here for releases and instructions!](https://github.com/aseprite/aseprite/releases)
 
 ## License
 
