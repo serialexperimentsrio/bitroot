@@ -1,9 +1,9 @@
 # Bitroot
 
-> [!WARNING]
-> This project is a prototype and doesn’t have a stable release yet. Features and design may change.
+> [!NOTE]
+> **This project is a prototype and doesn’t have a stable release yet. Design and features are subject to change.**
 
-A **low-res** blocky typeface that I put together in [Aseprite](https://www.aseprite.org/), then exported it to [PixelFont](https://yellowafterlife.itch.io/pixelfont) to generate scalable font files.
+**Bitroot** is a low-res blocky typeface that I put together in [Aseprite](https://www.aseprite.org/), then exported it to [PixelFont](https://yellowafterlife.itch.io/pixelfont) to generate scalable font files.
 
  It’s a crisp look for video games and stays readable even at small sizes.
 
@@ -31,10 +31,10 @@ Use imperative, properly cased commit messages (e.g., "Add glyph for ampersand")
 4. Generate the font as scalable `ttf` format
 5. Submit PR with updated `bitroot-typeface.aseprite`, font files, and JSON (if modified)
 
-> [!NOTE]
-> Aseprite is paid software ($19.99 USD), but since the source code is available on GitHub, you can build and install it for free.
+> [!TIP]
+> **Aseprite is paid software ($19.99 USD), but since the source code is available on GitHub, it can built and installed for free!**
 > 
-> [Click here for releases and instructions!](https://github.com/aseprite/aseprite/releases)
+> **[Click here for releases and instructions.](https://github.com/aseprite/aseprite/releases)**
 
 ## License
 
