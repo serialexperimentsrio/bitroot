@@ -1,0 +1,2 @@
+pixel-font-builder==0.0.36
+pixel-font-knife==0.0.13

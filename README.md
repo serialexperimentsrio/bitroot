@@ -10,7 +10,7 @@
 ## Specifications
 
 <p align="center">
-  <img src="preview.png" alt="Bitroot Typeface Preview" width="100%">
+  <img src="src/preview.png" alt="Bitroot Typeface Preview" width="100%">
 </p>
 
 The characters are packed into a **tiny 5×10-pixel area**, **baseline 7 pixels down from the top**! **Capital letters** use up the full **7-pixel height**, meanwhile regular **lowercases** occupy a **5-pixel x-height** measured from the baseline upward.
