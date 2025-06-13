@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Bitroot</title>
+    <link rel="stylesheet" href="css/index.css">
+</head>
+<body>
+
+<header class="header">
+    <h1 id="title" class="title">Bitroot</h1>
+</header>
+
+<main class="main">
+    <div class="options">
+        <label class="option">
+            <input id="font-style-normal" name="font_style" type="radio" onchange="onFontStyleChange('Normal')" checked>
+            <span></span>
+            Normal
+        </label>
+        <label class="option">
+            <input id="font-style-square-dot" name="font_style" type="radio" onchange="onFontStyleChange('SquareDot')">
+            <span></span>
+            SquareDot
+        </label>
+        <label class="option">
+            <input id="font-style-circle-dot" name="font_style" type="radio" onchange="onFontStyleChange('CircleDot')">
+            <span></span>
+            CircleDot
+        </label>
+    </div>
+
+    <label>
+        <textarea id="input-box" class="input-box">
+ABCDEFGHIJKLMNOPQRSTUVWXYZ
+abcdefghijklmnopqrstuvwxyz
+0123456789
+$₵€£¥¤+-*/÷=%"'#@&
+_(),.;:¿?¡!\{}<>[]
+§¶µ´^~©®™
+        </textarea>
+    </label>
+</main>
+
+<div class="footer">
+    <span>© 2025</span>
+    <a href="https://github.com/serialexperimentsrio" target="_blank">Rio</a>
+    <span> · </span>
+    <a href="https://github.com/serialexperimentsrio/bitroot" target="_blank">Source Code</a>
+</div>
+
+<script src="js/index.js" type="module"></script>
+
+</body>
+</html>
