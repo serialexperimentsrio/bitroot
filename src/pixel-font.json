@@ -1,0 +1,60 @@
+{
+	"$baseURI": "https://yal.cc/r/20/pixelfont/",
+	"$version": "1.0",
+	"in-glyphs": [
+		"ABCDEFGHIJKLMNOPQR",
+		"STUVWXYZ",
+		"abcdefghijklmnopqr",
+		"stuvwxyz",
+		"0123456789",
+		"$¢€£¥¤+-*/÷=%\"'#@&",
+		"_(),.;:¿?¡!\\{}<>[]",
+		"§¶µ`^~©®™ "
+	],
+	"glyph-color": "white",
+	"glyph-width": 5,
+	"glyph-height": 13,
+	"glyph-ofs-x": 2,
+	"glyph-ofs-y": 2,
+	"glyph-sep-x": 2,
+	"glyph-sep-y": 2,
+	"glyph-base-x": 0,
+	"glyph-baseline": 10,
+	"glyph-spacing": 1,
+	"font-is-mono": true,
+	"font-em-square": 170,
+	"font-line-gap": 0,
+	"font-ascend": 130,
+	"font-descend": -40,
+	"font-px-size": 13,
+	"contour-type": "pixel",
+	"font-type": "ttf",
+	"font-is-upper": false,
+	"font-name": "Bitroot",
+	"font-author": "Rio",
+	"font-copy": "Copyright (c) 2025, Rio (engineer@disroot.org)",
+	"font-version-major": 0,
+	"font-version-minor": 1,
+	"font-desc": "Sweet fonts to leave your worries behind you",
+	"font-license": "SIL Open Font License 1.1",
+	"font-license-url": "https://github.com/serialexperimentsrio/bitroot/blob/main/LICENSE.txt",
+	"font-sample-text": [
+		"Quiet foxes jump over blazing red maples, watching dark pines sway"
+	],
+	"font-embedding": "0",
+	"font-weight-class": "400",
+	"font-width-class": "5",
+	"font-creation-date": "2025-05-28",
+	"font-creation-time": "00:02",
+	"font-modification-date": "2025-06-29",
+	"font-modification-time": "11:50",
+	"font-modification-auto": true,
+	"overrides": [
+		"# hide the pixels of the \"space\" characters!",
+		"# (but they'll still have a width)",
+		"hide \\s"
+	],
+	"font-preview-text": [
+		"surgical procedure"
+	]
+}
