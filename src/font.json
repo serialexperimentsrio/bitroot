@@ -1,9 +1,9 @@
 {
 	"name": "Bitroot",
-	"version": "0.2",
+	"version": "0.3",
 	"author": "Rio",
 	"copyright": "Copyright (c) 2025, Rio (engineer@disroot.org)",
-	"description": "Bitroot is a 5×10 monospaced pixel font.",
+	"description": "Bitroot is a monospaced pixel font on a 5×13 grid.",
 	"license": "This Font Software is licensed under the SIL Open Font License, Version 1.1.",
 	"license-url": "https://openfontlicense.org",
 	"sample-text": "Quiet foxes jump over blazing red maples, watching dark pines sway",
