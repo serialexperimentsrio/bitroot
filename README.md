@@ -68,7 +68,7 @@ Use imperative, properly cased commit messages that name the glyphs you changed 
 
 4. Submit a PR with the `.aseprite` file, `src/font.json` (if changed), and the rebuilt `bitroot.ttf`, `bitroot.woff2`, `preview.png`, and `specimen.png`.
 
-`build.py` checks every glyph outline against the sheet. CI rebuilds the fonts and fails if the committed font files don't match the `.aseprite` source.
+`build.py` checks every glyph outline against the sheet. Accented letters are separate drawings, so it also warns when one no longer matches its base letter (for example, after redrawing `A` but not `À`). CI rebuilds the fonts and fails if the committed font files don't match the `.aseprite` source.
 
 ### Releasing
 

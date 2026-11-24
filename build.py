@@ -189,6 +189,22 @@ def check(path, bms):
     assert {font["hmtx"][g][0] for g in font.getGlyphOrder()} == {(CW + CFG["spacing"]) * U}, "not monospaced"
 
 
+def stale_accents(bms):
+    """Accented letters whose body no longer matches their base letter (e.g. A redrawn, À not)."""
+    import unicodedata
+    out = []
+    for ch, px in bms.items():
+        base, *marks = unicodedata.normalize("NFD", ch)
+        if not marks or base not in bms:
+            continue
+        top = CAP if base.isupper() else CFG["x-height"]  # accents sit above this row
+        bottom = 0 if marks[0] == "̧" else BASE - CH  # a cedilla sits below the baseline
+        body = lambda p: {(x, y) for x, y in p if bottom <= y < top}
+        if body(px) != body(bms[base]):
+            out.append(f"{ch} (base {base})")
+    return out
+
+
 def build_preview(bms, grid_cell, path, scale=10):
     """Glyphs in pairs (Aa Bb … then everything else in sheet order) on a checkerboard."""
     chars = [c for row in CFG["rows"] for c in row if not c.isspace()]
@@ -260,6 +276,8 @@ def main():
     build_preview(bms, cell, ROOT / "preview.png")
     build_specimen(ROOT / "bitroot.ttf", ROOT / "specimen.png")
     print(f"built {len(bms)} glyphs")
+    if stale := stale_accents(bms):
+        print("warning: redraw these to match their base letter:", ", ".join(stale))
 
 
 if __name__ == "__main__":
