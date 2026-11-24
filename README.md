@@ -55,6 +55,8 @@ body {
 
 Use imperative, properly cased commit messages that name the glyphs you changed (for example, "Add glyph for ampersand" or "Redraw g and y").
 
+Thanks to TakWolf, whose suggestions in #1 led to the Python build, the release workflow, and the 3px space for accents.
+
 ### Workflow
 
 1. Edit `src/bitroot-typeface.aseprite` in [Aseprite](https://www.aseprite.org/). Draw glyphs on the layers inside the `Glyphs` group.
