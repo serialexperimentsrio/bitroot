@@ -9,8 +9,8 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
         with:
           python-version: "3.14"
       - run: pip install -r requirements.txt
@@ -28,4 +28,10 @@ jobs:
           zip "bitroot-$GITHUB_REF_NAME.zip" bitroot.ttf bitroot.woff2 LICENSE.txt
           # 0.x versions are pre-releases; 1.0 and later are normal releases
           pre=$([ "${version%%.*}" = 0 ] && echo --prerelease || true)
-          gh release create "$GITHUB_REF_NAME" "bitroot-$GITHUB_REF_NAME.zip" --generate-notes $pre
+          zipfile="bitroot-$GITHUB_REF_NAME.zip"
+          # a re-pushed tag updates the existing release instead of failing
+          if gh release view "$GITHUB_REF_NAME" >/dev/null 2>&1; then
+            gh release upload "$GITHUB_REF_NAME" "$zipfile" --clobber
+          else
+            gh release create "$GITHUB_REF_NAME" "$zipfile" --generate-notes $pre
+          fi
