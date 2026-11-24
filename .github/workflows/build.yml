@@ -1,0 +1,29 @@
+name: Build
+
+on: [push, pull_request]
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.14"
+      - run: pip install -r requirements.txt
+      - run: python build.py
+      - name: Committed fonts match the Aseprite source
+        run: git diff --exit-code -- bitroot.ttf bitroot.woff2
+
+      - name: Publish release for v* tags
+        if: startsWith(github.ref, 'refs/tags/v')
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          version=$(python -c "import json; print(json.load(open('src/font.json', encoding='utf-8'))['version'])")
+          [ "$GITHUB_REF_NAME" = "v$version" ] || { echo "Tag $GITHUB_REF_NAME does not match version $version in src/font.json"; exit 1; }
+          zip "bitroot-$GITHUB_REF_NAME.zip" bitroot.ttf bitroot.woff2 LICENSE.txt
+          gh release create "$GITHUB_REF_NAME" "bitroot-$GITHUB_REF_NAME.zip" --generate-notes --prerelease
