@@ -26,4 +26,6 @@ jobs:
           version=$(python -c "import json; print(json.load(open('src/font.json', encoding='utf-8'))['version'])")
           [ "$GITHUB_REF_NAME" = "v$version" ] || { echo "Tag $GITHUB_REF_NAME does not match version $version in src/font.json"; exit 1; }
           zip "bitroot-$GITHUB_REF_NAME.zip" bitroot.ttf bitroot.woff2 LICENSE.txt
-          gh release create "$GITHUB_REF_NAME" "bitroot-$GITHUB_REF_NAME.zip" --generate-notes --prerelease
+          # 0.x versions are pre-releases; 1.0 and later are normal releases
+          pre=$([ "${version%%.*}" = 0 ] && echo --prerelease || true)
+          gh release create "$GITHUB_REF_NAME" "bitroot-$GITHUB_REF_NAME.zip" --generate-notes $pre

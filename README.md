@@ -1,7 +1,7 @@
 # Bitroot
 
 > [!NOTE]
-> **This project is a prototype and doesn’t have a stable release yet. Design and features are subject to change.**
+> **Bitroot is at version 0.x. Glyphs and metrics may still change between versions.**
 
 <p align="center">
   <img src="specimen.png" alt="Sample text set in Bitroot: the name, a pangram, capitals, digits and symbols, accented text, and a line of code" width="100%">
@@ -72,7 +72,7 @@ Use imperative, properly cased commit messages that name the glyphs you changed 
 
 ### Releasing
 
-Set `version` in `src/font.json`, rebuild, commit, then push a matching tag (for example `v0.2`). CI publishes a GitHub pre-release with a zip of the font files.
+Set `version` in `src/font.json`, rebuild, commit, then push a matching tag (for example `v0.2`). CI publishes a GitHub release with a zip of the font files. Versions below 1.0 are marked as pre-releases.
 
 > [!TIP]
 > **Aseprite is paid software ($19.99 USD), but its source code is available on GitHub, so it can be built and installed for free.**
