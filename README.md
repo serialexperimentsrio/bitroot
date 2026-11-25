@@ -147,7 +147,7 @@ CI runs the build on every push and fails if the committed font files don't matc
 
 Write commit messages in the imperative mood, properly cased, and name the glyphs you changed (for example, "Add glyph for ampersand" or "Redraw g and y").
 
-Thanks to TakWolf, whose suggestions in #1 led to the Python build, the release workflow and the 3 px accent space.
+Thanks to [TakWolf](https://github.com/TakWolf), whose suggestions in [#1](https://github.com/serialexperimentsrio/bitroot/pull/1) led to the Python build, the release workflow and the 3 px accent space.
 
 > [!TIP]
 > **Aseprite is paid software ($19.99 USD), but its source code is available on GitHub, so it can be built and installed for free.**
