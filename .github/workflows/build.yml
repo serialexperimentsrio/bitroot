@@ -33,5 +33,5 @@ jobs:
           if gh release view "$GITHUB_REF_NAME" >/dev/null 2>&1; then
             gh release upload "$GITHUB_REF_NAME" "$zipfile" --clobber
           else
-            gh release create "$GITHUB_REF_NAME" "$zipfile" --generate-notes $pre
+            gh release create "$GITHUB_REF_NAME" "$zipfile" --title "Bitroot $version" --generate-notes $pre
           fi
