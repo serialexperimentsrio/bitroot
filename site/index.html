@@ -1,0 +1,884 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Bitroot · a field guide to a pixel font</title>
+<meta name="description" content="Bitroot is a free monospaced pixel font grown on a 5×13 grid. Type in the playground, browse every glyph, and download it.">
+<meta name="theme-color" content="#f2eddf">
+<link rel="icon" href="data:,">
+<style>
+/* The deployed site serves the font next to this page; the second URL is for previewing from the repository. */
+@font-face {
+  font-family: "Bitroot";
+  src: url("bitroot.woff2") format("woff2"), url("../bitroot.woff2") format("woff2");
+  font-display: block;
+}
+
+/*
+  The whole page sits on one grid. A column (--c) is one character of body text, 6 font pixels wide.
+  A row (--r) is one line, 13 font pixels tall. Every box starts and ends on a grid line, and every
+  size is a whole number of font pixels (--u). The script snaps --u to whole device pixels and works
+  out the column-based widths, so nothing drifts at any zoom level.
+*/
+:root {
+  --u: 2px; --hair: 1px; --bo: 1px; --rh: 13px;
+  --wrap: 1104px; --gutter: 12px; --w2: 540px; --w3: 352px;
+  --c: calc(var(--u) * 6); --r: calc(var(--u) * 13); --rb: calc(var(--r) - var(--rh));
+  /* --e: how far a frame line reaches outside its box. --notch cuts the corner pixel off a frame. */
+  --e: calc(var(--u) - var(--bo));
+  --notch: polygon(var(--bo) calc(var(--e) * -1), calc(100% - var(--bo)) calc(var(--e) * -1), calc(100% - var(--bo)) var(--bo),
+    calc(100% + var(--e)) var(--bo), calc(100% + var(--e)) calc(100% - var(--bo)), calc(100% - var(--bo)) calc(100% - var(--bo)),
+    calc(100% - var(--bo)) calc(100% + var(--e)), var(--bo) calc(100% + var(--e)), var(--bo) calc(100% - var(--bo)),
+    calc(var(--e) * -1) calc(100% - var(--bo)), calc(var(--e) * -1) var(--bo), var(--bo) var(--bo));
+  /* checkerboards and dots, one font pixel per square */
+  --dither: conic-gradient(var(--paper-2) 25%, var(--paper) 0 50%, var(--paper-2) 0 75%, var(--paper) 0) 0 0 / calc(var(--u) * 2) calc(var(--u) * 2);
+  --checker: conic-gradient(var(--ink) 25%, transparent 0 50%, var(--ink) 0 75%, transparent 0) 0 0 / calc(var(--u) * 2) calc(var(--u) * 2);
+  --dots: repeating-linear-gradient(90deg, var(--ink) 0 var(--u), transparent 0 calc(var(--u) * 2));
+  --paper: #f2eddf; --paper-2: #e6dfcb; --ink: #1d2419; --muted: #6d6a55;
+  --moss: #4c7a33; --sprout: #7fb24a; --soil: #8a5a35; --root: #b4532a; --label: #f6e6a2; --sky: #3d6b8a;
+}
+
+* { box-sizing: border-box; margin: 0; }
+html {
+  color: var(--ink); scroll-behavior: smooth;
+  background-color: var(--paper);
+  background-image:
+    linear-gradient(var(--paper-2) var(--hair), transparent var(--hair)),
+    linear-gradient(90deg, var(--paper-2) var(--hair), transparent var(--hair));
+  background-size: var(--c) var(--r);
+}
+body {
+  font-family: "Bitroot", monospace;
+  font-size: calc(var(--u) * 10);
+  line-height: var(--r);
+  -webkit-font-smoothing: none;
+  font-smooth: never;
+}
+/* the font has one weight and no italic: never let the browser fake them */
+b, strong, i, em { font-weight: normal; font-style: normal; }
+i { color: var(--moss); }
+::-webkit-scrollbar { width: var(--c); height: var(--c); background: var(--paper-2); }
+::-webkit-scrollbar-thumb { background: var(--ink); border: var(--u) solid var(--paper-2); }
+@supports not selector(::-webkit-scrollbar) { html { scrollbar-color: var(--ink) var(--paper-2); } }
+::selection { background: var(--moss); color: var(--paper); }
+a { color: inherit; text-decoration-thickness: var(--bo); text-underline-offset: calc(var(--u) * 2); }
+a:hover { background: var(--ink); color: var(--paper); text-decoration: none; }
+
+/* Lines are one font pixel thick and centred on a grid line, so they cover it exactly. */
+.box, .btn, .seg > *, #grid button { outline: var(--u) solid var(--ink); outline-offset: calc(var(--bo) * -1); }
+.box, .btn, .seg, #grid { clip-path: var(--notch); }
+:focus-visible { outline: var(--u) solid var(--root); outline-offset: calc(var(--bo) * -1); z-index: 1; }
+
+.s4 { font-size: calc(var(--u) * 20); line-height: calc(var(--r) * 2); }
+.muted { color: var(--muted); }
+.moss { color: var(--moss); } .root { color: var(--root); } .soil { color: var(--soil); } .sky { color: var(--sky); }
+.stack > * + * { margin-top: var(--r); }
+.sr-only, .hero h1 { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+.wrap { width: var(--wrap); margin-left: var(--gutter); }
+
+/* a rule on the grid line under (or over) a block */
+.rule-b, .rule-t { position: relative; }
+.rule-b::after, .rule-t::before { content: ""; position: absolute; left: 0; right: 0; height: var(--u); background: var(--ink); }
+.rule-b::after { top: calc(100% - var(--bo)); }
+.rule-t::before { top: calc(var(--bo) - var(--u)); }
+.dashed::after { top: calc(100% - var(--u)); height: calc(var(--u) * 2); background: var(--checker); }
+
+/* ---------- top bar ---------- */
+.bar { position: sticky; top: 0; z-index: 10; background: var(--paper); }
+.bar .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; column-gap: calc(var(--c) * 4); padding: var(--rh) 0 var(--rb); }
+.brand { text-decoration: none; }
+.bar nav { display: flex; flex-wrap: wrap; column-gap: calc(var(--c) * 2); }
+.bar nav a { text-decoration: none; }
+.bar nav a::before { content: "/"; color: var(--muted); }
+
+/* ---------- sections ---------- */
+.plate { padding-top: calc(var(--r) * 4); }
+/* heading, a blank row, the divider on the grid line, a blank row, then the subheading */
+.plate-head { margin-bottom: calc(var(--r) * 2); }
+.plate-head h2 { font-weight: normal; padding-bottom: var(--r); }
+/* a 12x13 pixel sprite at heading size: 4 columns by 2 rows */
+.sprite { display: inline-block; vertical-align: top; width: calc(var(--c) * 4); height: calc(var(--r) * 2); }
+.sprite svg { display: block; width: 100%; height: 100%; }
+.plate-head p { color: var(--muted); margin-top: var(--r); }
+
+/* Buttons are two rows tall with the text centred, so descenders never touch the frame. */
+.btn, .seg > * {
+  display: inline-block; vertical-align: top; white-space: nowrap;
+  font: inherit; line-height: var(--r); padding: var(--rh) calc(var(--c) * 2) var(--rb);
+  color: var(--ink); background: var(--paper); border: 0; text-decoration: none; cursor: pointer;
+}
+.btn.solid { background: var(--ink); color: var(--paper); }
+.btn:hover, .btn.solid:hover { background: var(--moss); color: var(--paper); }
+.actions { display: flex; flex-wrap: wrap; gap: var(--r) calc(var(--c) * 2); }
+
+/* segmented controls: touching buttons share one line between them */
+.seg { display: flex; flex-wrap: wrap; }
+.seg > * { padding-left: var(--c); padding-right: var(--c); }
+.seg > span { background: var(--dither); color: var(--muted); cursor: default; }
+.seg > button:hover { background: var(--dither); }
+.seg > [aria-pressed="true"], .seg > [aria-pressed="true"]:hover { background: var(--ink); color: var(--paper); }
+
+/* ---------- hero ---------- */
+.hero { display: grid; grid-template-columns: 1fr calc(var(--c) * 36); column-gap: calc(var(--c) * 4); align-items: start; padding-top: calc(var(--r) * 2); }
+.hero-tag { color: var(--root); }
+#sprout { display: block; cursor: pointer; }
+
+.label { position: relative; background: var(--label); padding: var(--r) calc(var(--c) * 2); }
+.label::before { content: ""; position: absolute; inset: calc(var(--bo) + var(--u)); border: var(--u) solid var(--ink); pointer-events: none; }
+.label-title.rule-b::after { left: calc(var(--c) * -2 + var(--bo) + var(--u)); right: calc(var(--c) * -2 + var(--bo) + var(--u)); background: var(--dots); }
+.label dl { display: grid; grid-template-columns: calc(var(--c) * 10) 1fr; }
+.label dt { color: var(--muted); }
+.label dd { overflow-wrap: anywhere; }
+.stamp { margin-top: var(--r); color: var(--root); text-align: right; }
+
+/* ---------- playground ---------- */
+.tools { display: flex; flex-wrap: wrap; gap: var(--r) calc(var(--c) * 2); margin-bottom: var(--r); }
+#pg {
+  display: block; width: 100%; height: calc(var(--r) * 14); resize: none;
+  font-family: inherit; border: 0; padding: var(--r) var(--c);
+  background-origin: content-box; background-attachment: local;
+  -webkit-font-smoothing: none;
+}
+#pg[data-stage="paper"] { background-color: var(--paper); color: var(--ink); }
+#pg[data-stage="soil"] { background-color: #2b2118; color: #e9d9b8; }
+#pg[data-stage="terminal"] { background-color: #08110a; color: #7dff8a; }
+#pg[data-stage="label"] { background-color: var(--label); color: var(--ink); }
+#pg-status { margin-top: var(--r); color: var(--muted); }
+
+/* ---------- anatomy ---------- */
+.anatomy { display: grid; grid-template-columns: calc(var(--c) * 36) 1fr; column-gap: calc(var(--c) * 4); align-items: start; }
+/* --a is one font pixel of the big drawing: 9 body pixels, so the 4 cells span 36 columns and 9 rows */
+.cell { --a: calc(var(--u) * 9); position: relative; width: calc(var(--a) * 24); height: calc(var(--a) * 13); background: var(--paper); overflow: hidden; }
+.cell .zone { position: absolute; left: 0; right: 0; }
+.cell .z-canopy { top: 0; height: calc(var(--a) * 3); background: color-mix(in srgb, var(--sky) 18%, var(--paper)); }
+.cell .z-sprout { top: calc(var(--a) * 3); height: calc(var(--a) * 2); background: color-mix(in srgb, var(--sprout) 22%, var(--paper)); }
+.cell .z-x { top: calc(var(--a) * 5); height: calc(var(--a) * 5); background: color-mix(in srgb, var(--moss) 18%, var(--paper)); }
+.cell .z-roots { top: calc(var(--a) * 10); height: calc(var(--a) * 3); background: color-mix(in srgb, var(--soil) 28%, var(--paper)); }
+.cell .soil-line { position: absolute; left: 0; right: 0; top: calc(var(--a) * 10 - var(--bo)); height: var(--u); background: var(--soil); }
+.cell .pixels {
+  position: absolute; inset: 0;
+  background-image:
+    linear-gradient(color-mix(in srgb, var(--ink) 14%, transparent) var(--hair), transparent var(--hair)),
+    linear-gradient(90deg, color-mix(in srgb, var(--ink) 14%, transparent) var(--hair), transparent var(--hair));
+  background-size: var(--a) var(--a);
+}
+.cell .glyphs { position: absolute; inset: 0; font-size: calc(var(--a) * 10); line-height: calc(var(--a) * 13); white-space: pre; }
+.legend { list-style: none; padding: 0; }
+.legend li { display: grid; grid-template-columns: calc(var(--c) * 2) 1fr; column-gap: var(--c); align-items: start; }
+.legend li + li { margin-top: var(--r); }
+.legend .sw { height: var(--r); }
+.facts { display: grid; grid-template-columns: repeat(3, var(--w3)); gap: var(--r) var(--c); margin-top: calc(var(--r) * 2); }
+.fact { padding: var(--r) calc(var(--c) * 2); background: var(--paper); }
+.fact b { display: block; color: var(--moss); }
+
+/* ---------- collection ---------- */
+.collection { display: grid; grid-template-columns: 1fr calc(var(--c) * 28); column-gap: calc(var(--c) * 4); align-items: start; }
+.filters { margin-bottom: var(--r); }
+/* every glyph button is 4 columns by 2 rows, and the 40px glyph is exactly 2 by 2 */
+#grid { display: grid; grid-template-columns: repeat(auto-fill, calc(var(--c) * 4)); }
+#grid button {
+  font: inherit; font-size: calc(var(--u) * 20); line-height: calc(var(--r) * 2);
+  color: var(--ink); background: var(--paper); cursor: pointer; padding: 0; border: 0;
+}
+#grid button:hover { background: var(--dither); }
+#grid button[aria-pressed="true"] { background: var(--moss); color: var(--paper); }
+.card { position: sticky; top: calc(var(--r) * 3); }
+/* --g is one font pixel of the big glyph: 10 body pixels, so its 6x13 cell is exactly 10 columns by 10 rows */
+.big { --g: calc(var(--u) * 10); width: calc(var(--g) * 6); height: calc(var(--g) * 13); margin: 0 auto; position: relative; overflow: hidden;
+  font-size: calc(var(--g) * 10); line-height: calc(var(--g) * 13); background-color: var(--paper);
+  background-image:
+    linear-gradient(color-mix(in srgb, var(--ink) 14%, transparent) var(--hair), transparent var(--hair)),
+    linear-gradient(90deg, color-mix(in srgb, var(--ink) 14%, transparent) var(--hair), transparent var(--hair));
+  background-size: var(--g) var(--g);
+}
+.big::after { content: ""; position: absolute; left: 0; right: 0; top: calc(var(--g) * 10 - var(--bo)); height: var(--u); background: var(--soil); }
+.card dl { display: grid; grid-template-columns: calc(var(--c) * 6) 1fr; }
+.card dt { color: var(--muted); } .card dd { overflow-wrap: anywhere; }
+
+/* ---------- in the wild ---------- */
+/* each figure spans two shared rows (box, caption), so boxes side by side are always the same height */
+.wild { display: grid; grid-template-columns: repeat(2, var(--w2)); column-gap: calc(var(--c) * 2); }
+.ex { display: grid; grid-row: span 2; grid-template-rows: subgrid; }
+.ex pre, .snippet pre { font: inherit; white-space: pre; overflow-x: auto; scrollbar-width: none; padding: var(--r) calc(var(--c) * 2); }
+.ex figcaption { color: var(--muted); padding-bottom: calc(var(--r) * 2); }
+.ex.term pre { background: #08110a; color: #b7f5bd; } .ex.term .g { color: #7dff8a; } .ex.term .y { color: #ffd166; } .ex.term .r { color: #ff7b6b; } .ex.term .c { color: #6c9; }
+.ex.packet pre { background: var(--label); }
+.ex.code pre { background: #1b1f17; color: #e6e1cf; } .ex.code .k { color: #ff9f6b; } .ex.code .s { color: #b8db7a; } .ex.code .c { color: #8a8f7a; } .ex.code .f { color: #79c0e6; } .ex.code .n { color: #e6c86e; }
+.ex.rpg pre { background: #101a3a; color: #fff; position: relative; } .ex.rpg .y { color: #ffd166; }
+.ex.rpg pre::before { content: ""; position: absolute; inset: calc(var(--u) * 3); border: var(--u) solid #fff; pointer-events: none; }
+.ex.receipt pre { background: #fffdf6; color: #222; }
+.ex.lang pre, .ex.table pre, .ex.almanac pre { background: var(--paper); }
+.ex.almanac .today { background: var(--moss); color: var(--paper); } .ex.almanac .wk { color: var(--root); }
+
+/* ---------- greenhouse shell ---------- */
+.shell { background: #0c1209; color: #cfe8c4; padding: var(--r) calc(var(--c) * 2); }
+.shell pre { font: inherit; white-space: pre-wrap; height: calc(var(--r) * 16); overflow-y: auto; }
+.shell pre::-webkit-scrollbar { width: var(--c); background: #0c1209; }
+.shell pre::-webkit-scrollbar-thumb { background: #2c3a26; }
+.shell .line { display: flex; column-gap: var(--c); }
+.shell input { flex: 1; min-width: 0; width: 0; height: var(--r); font: inherit; color: inherit; background: transparent; border: 0; outline: 0; padding: 0; caret-color: transparent; }
+.shell .line { position: relative; }
+/* block cursor: one character cell after the prompt (18 characters and a space) */
+.caret { position: absolute; top: 0; left: calc(var(--c) * (19 + var(--n, 0))); width: var(--c); height: var(--r); background: #7dff8a; mix-blend-mode: difference; pointer-events: none; animation: blink 1s steps(1) infinite; }
+.shell:not(:focus-within) .caret { background: none; outline: var(--bo) solid #7dff8a; outline-offset: calc(var(--bo) * -1); mix-blend-mode: normal; animation: none; }
+@keyframes blink { 50% { opacity: 0; } }
+.shell .p { color: #7dff8a; } .shell .m { color: #8fbc6a; } .shell .r { color: #e6824f; } .shell .s { color: #b07b4d; } .shell .y { color: #ffd166; } .shell .d { color: #7d8a74; }
+
+/* ---------- harvest ---------- */
+.harvest > * + * { margin-top: calc(var(--r) * 2); }
+.snippet { position: relative; }
+.snippet pre { background: var(--paper); }
+.snippet .btn { position: absolute; top: 0; right: 0; }
+
+footer::after { content: ""; position: absolute; left: 0; right: 0; top: calc(var(--r) * -1); height: var(--r); background: var(--grass, none) 0 0 / calc(var(--c) * 4) var(--r) repeat-x; pointer-events: none; }
+footer { margin-top: calc(var(--r) * 4); padding: var(--r) 0 calc(var(--r) * 2); }
+footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; column-gap: calc(var(--c) * 4); }
+
+/* let grid children shrink below their longest line; wide examples scroll instead */
+.hero > *, .collection > *, .anatomy > *, .wild > * { min-width: 0; }
+
+@media (max-width: 860px) {
+  .hero, .collection, .anatomy, .facts, .wild { grid-template-columns: 1fr; }
+  .hero { row-gap: calc(var(--r) * 2); }
+  .anatomy, .collection { row-gap: var(--r); }
+  .cell { --a: calc(var(--u) * 4); }
+  .card { position: static; }
+  .tagline { font-size: calc(var(--u) * 10); line-height: var(--r); }
+}
+@media (prefers-reduced-motion: reduce) { * { scroll-behavior: auto !important; } .caret { animation: none; } }
+</style>
+</head>
+<body>
+
+<header class="bar rule-b">
+  <div class="wrap">
+    <a class="brand" href="#top">BITROOT <span class="muted" data-version>v0.3</span></a>
+    <nav aria-label="Sections">
+      <a href="#playground">playground</a>
+      <a href="#anatomy">anatomy</a>
+      <a href="#collection">glyphs</a>
+      <a href="#wild">in the wild</a>
+      <a href="#greenhouse">greenhouse</a>
+      <a href="#harvest">download</a>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+
+<section class="wrap hero" aria-labelledby="title">
+  <div class="stack">
+    <p class="hero-tag">TYPE SPECIMEN · FIELD GUIDE</p>
+    <h1 id="title">Bitroot</h1>
+    <canvas id="sprout" role="img" aria-label="The word Bitroot growing out of the soil, pixel by pixel, with roots spreading below"></canvas>
+    <p class="tagline s4">A monospaced pixel font,<br>grown on a 5×13 grid.</p>
+    <div class="actions">
+      <a class="btn solid" href="#harvest">Download 4 free</a>
+      <a class="btn" href="#playground">Try it</a>
+      <a class="btn" href="https://github.com/serialexperimentsrio/bitroot">GitHub</a>
+    </div>
+    <p class="muted">Click the word to grow it again.</p>
+  </div>
+
+  <aside class="label box" aria-label="Specimen label">
+    <p class="label-title rule-b">HERBARIUM · SPECIMEN No. <span data-version-plain>0.3</span></p>
+    <dl>
+      <dt>Name</dt><dd>Bitroot</dd>
+      <dt>Latin</dt><dd><i>Typographia bitradix</i></dd>
+      <dt>Family</dt><dd>Monospace</dd>
+      <dt>Genus</dt><dd>Pixel</dd>
+      <dt>Cell</dt><dd>5×13 px</dd>
+      <dt>Glyphs</dt><dd data-count>181</dd>
+      <dt>Habitat</dt><dd>Terminals, games, small screens</dd>
+      <dt>Grows</dt><dd>Sharp at 10, 20, 30px…</dd>
+      <dt>Collector</dt><dd>Rio</dd>
+      <dt>License</dt><dd>SIL OFL 1.1</dd>
+    </dl>
+    <p class="stamp">FREE TO PLANT ANYWHERE</p>
+  </aside>
+</section>
+
+<section class="wrap plate" id="playground" aria-labelledby="pg-title">
+  <header class="plate-head">
+    <h2 class="s4 rule-b dashed" id="pg-title"><span class="sprite" data-sprite="pencil" aria-hidden="true"></span> Playground</h2>
+    <p>Type anything. Every size here is a whole number of screen pixels per font pixel, so nothing blurs.</p>
+  </header>
+  <div class="tools">
+    <div class="seg" role="group" aria-label="Size"><span>size</span>
+      <button type="button" data-k="1">10</button>
+      <button type="button" data-k="2">20</button>
+      <button type="button" data-k="3">30</button>
+      <button type="button" data-k="4">40</button>
+      <button type="button" data-k="6">60</button>
+      <button type="button" data-k="8">80</button>
+    </div>
+    <div class="seg" role="group" aria-label="Sample"><span>sample</span>
+      <button type="button" data-sample="pangram">pangram</button>
+      <button type="button" data-sample="code">code</button>
+      <button type="button" data-sample="notes">field notes</button>
+      <button type="button" data-sample="accents">accents</button>
+      <button type="button" data-sample="glyphs">every glyph</button>
+    </div>
+    <div class="seg" role="group" aria-label="Colours"><span>colours</span>
+      <button type="button" data-stage="paper">paper</button>
+      <button type="button" data-stage="soil">soil</button>
+      <button type="button" data-stage="terminal">terminal</button>
+      <button type="button" data-stage="label">label</button>
+    </div>
+    <div class="seg" role="group" aria-label="Grid"><span>grid</span>
+      <button type="button" data-grid="none">off</button>
+      <button type="button" data-grid="cells">cells</button>
+      <button type="button" data-grid="pixels">pixels</button>
+    </div>
+  </div>
+  <label for="pg" class="sr-only">Playground text</label>
+  <textarea id="pg" class="box" spellcheck="false"></textarea>
+  <p id="pg-status" aria-live="polite"></p>
+</section>
+
+<section class="wrap plate" id="anatomy" aria-labelledby="an-title">
+  <header class="plate-head">
+    <h2 class="s4 rule-b dashed" id="an-title"><span class="sprite" data-sprite="seedling" aria-hidden="true"></span> Anatomy of a seedling</h2>
+    <p>Every glyph lives in the same 5×13 plot of soil.</p>
+  </header>
+  <div class="anatomy">
+    <div class="cell box" aria-hidden="true">
+      <div class="zone z-canopy"></div><div class="zone z-sprout"></div><div class="zone z-x"></div><div class="zone z-roots"></div>
+      <div class="pixels"></div><div class="soil-line"></div>
+      <div class="glyphs">Ågly</div>
+    </div>
+    <ul class="legend">
+      <li><span class="sw box" style="background: color-mix(in srgb, var(--sky) 35%, var(--paper))"></span><span><b class="sky">Canopy · 3px.</b> Where accents grow, so <span class="moss">À</span> and <span class="moss">à</span> never collide with the line above.</span></li>
+      <li><span class="sw box" style="background: color-mix(in srgb, var(--sprout) 40%, var(--paper))"></span><span><b class="moss">Sprouts · 2px.</b> Ascenders and capitals reach 7px above the soil.</span></li>
+      <li><span class="sw box" style="background: color-mix(in srgb, var(--moss) 35%, var(--paper))"></span><span><b class="moss">Stem · 5px.</b> The x-height, where most of a line of text lives.</span></li>
+      <li><span class="sw box" style="background: var(--soil)"></span><span><b class="soil">Soil line.</b> The baseline. Capitals sit centred between canopy and roots.</span></li>
+      <li><span class="sw box" style="background: color-mix(in srgb, var(--soil) 50%, var(--paper))"></span><span><b class="root">Roots · 3px.</b> Descenders of g, j, p, q, y.</span></li>
+    </ul>
+  </div>
+  <div class="facts">
+    <div class="fact box"><b>1 em = 10px</b>Use 10, 20, 30px and every pixel lands whole.</div>
+    <div class="fact box"><b>line-height 1.3</b>13 font pixels per line, built into the font.</div>
+    <div class="fact box"><b>6px advance</b>5px of ink, 1px of air. Columns always line up.</div>
+  </div>
+</section>
+
+<section class="wrap plate" id="collection" aria-labelledby="col-title">
+  <header class="plate-head">
+    <h2 class="s4 rule-b dashed" id="col-title"><span class="sprite" data-sprite="lens" aria-hidden="true"></span> The collection</h2>
+    <p>Every specimen in the font. Pick one to study it up close.</p>
+  </header>
+  <div class="collection">
+    <div>
+      <div class="seg filters" role="group" aria-label="Filter glyphs"><span>show</span>
+        <button type="button" data-filter="all" aria-pressed="true">all</button>
+        <button type="button" data-filter="letter">letters</button>
+        <button type="button" data-filter="accented">accented</button>
+        <button type="button" data-filter="figure">figures</button>
+        <button type="button" data-filter="symbol">symbols</button>
+      </div>
+      <div id="grid" role="group" aria-label="Glyphs"></div>
+    </div>
+    <aside class="card label box stack" aria-live="polite">
+      <div class="big box" id="big" aria-hidden="true">B</div>
+      <dl>
+        <dt>Entry</dt><dd id="c-no">…</dd>
+        <dt>Code</dt><dd id="c-code">…</dd>
+        <dt>Name</dt><dd id="c-name">…</dd>
+        <dt>HTML</dt><dd id="c-html">…</dd>
+      </dl>
+      <div><button class="btn" type="button" id="c-copy">copy glyph</button></div>
+    </aside>
+  </div>
+</section>
+
+<section class="wrap plate" id="wild" aria-labelledby="wild-title">
+  <header class="plate-head">
+    <h2 class="s4 rule-b dashed" id="wild-title"><span class="sprite" data-sprite="mushroom" aria-hidden="true"></span> Found in the wild</h2>
+    <p>Bitroot, observed in its natural habitats.</p>
+  </header>
+  <div class="wild">
+<figure class="ex term"><pre class="box"><span class="g">root@bitroot</span>:<span class="c">~/garden</span>$ ls -la
+drwxr-xr-x  rio  radish/
+-rw-r--r--  rio  seeds.txt    1.3K
+-rwxr-xr-x  rio  water.sh      512
+<span class="g">root@bitroot</span>:<span class="c">~/garden</span>$ ./water.sh --all
+<span class="g">[ok]</span> 12 plants watered
+<span class="y">[!!]</span> fern: prefers shade
+<span class="r">[xx]</span> cactus: too much water</pre><figcaption>Terminal · 20px on dark soil.</figcaption></figure>
+
+<figure class="ex packet"><pre class="box">HEIRLOOM SEED CO.        No. 013
+=================================
+PIXEL RADISH
+<i>Raphanus bitmapus</i>
+
+Sow 1px deep, 6px apart.
+Sprouts in 13 frames.
+Harvest when crisp.
+
+NET WT. 35 KB        PKD FOR 2026</pre><figcaption>Seed packet · aligned by the grid alone.</figcaption></figure>
+
+<figure class="ex code"><pre class="box"><span class="k">def</span> <span class="f">grow</span>(seed, water=<span class="n">3</span>):
+    <span class="s">"""Every pixel starts as a seed."""</span>
+    <span class="k">for</span> day <span class="k">in</span> <span class="f">range</span>(water):
+        seed = seed.sprout()  <span class="c"># +1px</span>
+    <span class="k">return</span> seed <span class="k">if</span> seed.alive <span class="k">else</span> <span class="n">None</span>
+
+<span class="f">print</span>(<span class="f">grow</span>(radish))  <span class="c"># 0O 1lI {}</span></pre><figcaption>Code · 0/O, 1/l/I and brackets stay distinct.</figcaption></figure>
+
+<figure class="ex rpg"><pre class="box">A wild <span class="y">MANDRAKE</span> appeared!
+It looks rooted to the spot.
+
+  &gt; FIGHT      SEEDS
+    ROOT       RUN
+
+  RIO   HP [========--] 42/50</pre><figcaption>Game dialogue · readable at a glance.</figcaption></figure>
+
+<figure class="ex receipt"><pre class="box">      GREENHOUSE SUPPLY
+      -----------------
+Potting soil 5kg ......  7.50
+Trowel ................  4.20
+Seeds (radish) ........  1.30
+Watering can .......... 12.00
+------------------------------
+TOTAL ................. 25.00
+
+     Thank you! Grow well.</pre><figcaption>Receipt · numbers line up in columns.</figcaption></figure>
+
+<figure class="ex table"><pre class="box">+--------+-------+-------+
+| plant  | water | light |
++--------+-------+-------+
+| radish | 2/wk  | sun   |
+| fern   | 4/wk  | shade |
+| cactus | 1/mo  | sun   |
++--------+-------+-------+</pre><figcaption>Plain-text table · ASCII only.</figcaption></figure>
+
+<figure class="ex lang"><pre class="box">Ça pousse !  Über-grün.
+¡Qué rábano!  Smörgåsbord.
+« Les racines sont profondes. »
+Naïve façade, déjà vu. 5°C ± 2°</pre><figcaption>Latin-1 · accents in the canopy, cedillas in the roots.</figcaption></figure>
+
+<figure class="ex almanac"><pre class="box" id="almanac"></pre><figcaption>Calendar · this month, figures in tidy columns.</figcaption></figure>
+  </div>
+</section>
+
+<section class="wrap plate" id="greenhouse" aria-labelledby="gh-title">
+  <header class="plate-head">
+    <h2 class="s4 rule-b dashed" id="gh-title"><span class="sprite" data-sprite="greenhouse" aria-hidden="true"></span> The greenhouse</h2>
+    <p>A tiny shell for growing things. Type <b>help</b> to begin.</p>
+  </header>
+  <div class="shell box" id="shell">
+    <pre id="sh-out" aria-live="polite"></pre>
+    <form class="line" id="sh-form" autocomplete="off">
+      <label for="sh-in" class="p">root@greenhouse:~$</label>
+      <input id="sh-in" spellcheck="false" autocapitalize="off" aria-label="Greenhouse command">
+      <span class="caret" aria-hidden="true"></span>
+    </form>
+  </div>
+</section>
+
+<section class="wrap plate" id="harvest" aria-labelledby="hv-title">
+  <header class="plate-head">
+    <h2 class="s4 rule-b dashed" id="hv-title"><span class="sprite" data-sprite="radish" aria-hidden="true"></span> Harvest</h2>
+    <p>Free for any use under the SIL Open Font License 1.1.</p>
+  </header>
+  <div class="harvest">
+    <div class="stack">
+      <p>For your computer, install the TTF. For the web, use WOFF2.</p>
+      <div class="actions">
+        <a class="btn solid" href="https://github.com/serialexperimentsrio/bitroot/raw/main/bitroot.ttf">bitroot.ttf</a>
+        <a class="btn" href="https://github.com/serialexperimentsrio/bitroot/raw/main/bitroot.woff2">bitroot.woff2</a>
+      </div>
+      <p class="muted">Or get a zip of any version from the <a href="https://github.com/serialexperimentsrio/bitroot/releases">releases</a>.</p>
+      <p class="muted">Tip: keep sizes at multiples of 10px and leave line-height at normal (1.3).</p>
+    </div>
+    <div class="stack">
+      <p>Use it on a web page without downloading:</p>
+      <div class="snippet">
+        <pre class="box" id="css-snippet"></pre>
+        <button class="btn" type="button" id="css-copy">copy</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer class="rule-t">
+  <div class="wrap">
+    <span>Bitroot is grown by Rio. This page is set entirely in Bitroot.</span>
+    <span><a href="https://github.com/serialexperimentsrio/bitroot">source</a> · <a href="https://github.com/serialexperimentsrio/bitroot/blob/main/LICENSE.txt">OFL 1.1</a></span>
+  </div>
+</footer>
+
+<script>
+"use strict";
+const $ = (s, r = document) => r.querySelector(s);
+const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+const css = (name) => getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+const esc = (s) => s.replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+const reduceMotion = matchMedia("(prefers-reduced-motion: reduce)").matches;
+let version = "0.3";
+
+/* ---------- the grid: one font pixel = a whole number of device pixels ---------- */
+const dpr = () => window.devicePixelRatio || 1;
+const px = (k) => Math.max(1, Math.round(k * dpr())) / dpr();
+const U = () => Math.max(1, Math.round(2 * dpr())); // device pixels per body font pixel
+function layout() {
+  const d = dpr(), Ud = U(), u = Ud / d, C = 6 * u;
+  const cols = Math.floor(document.documentElement.clientWidth / C);
+  const wrap = Math.min(92, cols - (cols >= 60 ? 4 : 2));
+  const set = (name, v) => document.documentElement.style.setProperty(name, v + "px");
+  set("--u", u);
+  set("--hair", 1 / d);
+  set("--bo", Math.floor(Ud / 2) / d);       // how far a line reaches inside its box
+  set("--rh", Math.floor((13 * Ud) / 2) / d); // half a row, rounded to a device pixel
+  set("--wrap", wrap * C);
+  set("--gutter", Math.floor((cols - wrap) / 2) * C);
+  set("--w2", Math.floor((wrap - 2) / 2) * C);
+  set("--w3", Math.floor((wrap - 2) / 3) * C);
+  applyPlayground();
+  drawSprout(true);
+  centreAnatomy();
+}
+
+// Centre the drawing and its legend against each other, rounded to whole rows so both stay on the grid.
+function centreAnatomy() {
+  const cell = $(".cell"), legend = $(".legend"), R = 13 * px(2);
+  cell.style.marginTop = legend.style.marginTop = "0px";
+  const a = cell.getBoundingClientRect(), b = legend.getBoundingClientRect();
+  if (Math.abs(a.top - b.top) > 1) return; // stacked on narrow screens
+  const [short, diff] = a.height < b.height ? [cell, b.height - a.height] : [legend, a.height - b.height];
+  short.style.marginTop = Math.round(diff / 2 / R) * R + "px";
+}
+
+/* ---------- hero: the word grows out of the soil ---------- */
+const canvas = $("#sprout");
+let sprout = null; // { pixels: [{x, y, c, t}], W, H }
+function rng(seed) { return () => ((seed = (seed + 0x6d2b79f5) | 0), (((seed ^ (seed >>> 15)) * (seed | 1)) >>> 0) / 2 ** 32); }
+
+// 42 x 26 font pixels: 7 characters wide and 2 lines tall, so the canvas covers whole grid cells
+function planSprout(seed) {
+  const text = "Bitroot", ROWS = 13, H = 26, W = text.length * 6;
+  const off = document.createElement("canvas");
+  off.width = W; off.height = ROWS;
+  const o = off.getContext("2d", { willReadFrequently: true });
+  o.font = "10px Bitroot"; o.fillStyle = "#000"; o.textBaseline = "alphabetic";
+  o.fillText(text, 0, 10);
+  const data = o.getImageData(0, 0, W, ROWS).data;
+  const r = rng(seed), pixels = [], ink = new Set();
+  for (let y = 0; y < ROWS; y++) for (let x = 0; x < W; x++) {
+    if (data[(y * W + x) * 4 + 3] < 128) continue;
+    ink.add(`${x},${y}`);
+    const t = y < 10 ? (9 - y) * 70 : 700 + (y - 10) * 90; // stems grow up, descenders grow down after
+    pixels.push({ x, y, c: "ink", t: t + r() * 60 });
+  }
+  // soil: an uneven ground line, then grains that thin out with depth
+  for (let y = 10; y < H; y++) for (let x = 0; x < W; x++) {
+    if (ink.has(`${x},${y}`)) continue;
+    const ground = y === 10 ? r() < 0.9 : r() < 0.05 - (y - 11) * 0.006;
+    if (ground) pixels.push({ x, y, c: "soil", t: x * 6 });
+  }
+  // roots: one thin root per foot that touches the soil; each step goes one pixel down,
+  // wiggles sideways, and sometimes forks
+  const feet = [];
+  for (let x = 0; x < W; x++) if (ink.has(`${x},9`) && !ink.has(`${x},10`)) feet.push(x);
+  const groups = [];
+  for (const x of feet) (groups.at(-1)?.at(-1) === x - 1 ? groups.at(-1) : groups[groups.length] = []).push(x);
+  const walkers = groups.map((g) => ({ x: g[Math.floor(r() * g.length)], y: 10, t: 900 + r() * 300, life: 4 + Math.floor(r() * 9) }));
+  while (walkers.length) {
+    const w = walkers.pop();
+    for (; w.life > 0 && w.y < H; w.life--) {
+      pixels.push({ x: w.x, y: w.y, c: "root", t: w.t });
+      w.y++; w.t += 55;
+      const d = r();
+      w.x = Math.max(0, Math.min(W - 2, w.x + (d < 0.25 ? -1 : d < 0.5 ? 1 : 0)));
+      if (w.y > 11 && r() < 0.18) walkers.push({ x: w.x + (r() < 0.5 ? -1 : 1), y: w.y, t: w.t, life: Math.ceil(w.life / 2) });
+    }
+  }
+  pixels.sort((a, b) => a.t - b.t);
+  return { pixels, W, H };
+}
+
+let seed = 7, anim = 0;
+function drawSprout(instant = false) {
+  if (!sprout) return;
+  // each hero pixel is k body pixels, so each letter covers k x k grid cells (k columns of 6 pixels)
+  const cols = Math.floor(canvas.parentElement.clientWidth / (6 * px(2)));
+  const k = Math.max(1, Math.min(7, Math.floor(cols / 7)));
+  const P = k * U();
+  canvas.width = sprout.W * P; canvas.height = sprout.H * P;
+  canvas.style.width = canvas.width / dpr() + "px";
+  canvas.style.height = canvas.height / dpr() + "px";
+  const ctx = canvas.getContext("2d");
+  const colour = { ink: css("--ink"), soil: css("--soil"), root: css("--root") };
+  cancelAnimationFrame(anim);
+  const paint = (limit) => {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    for (const p of sprout.pixels) {
+      if (p.t > limit) break;
+      ctx.fillStyle = colour[p.c];
+      ctx.globalAlpha = p.c === "soil" && p.y > 10 ? 0.45 : 1;
+      ctx.fillRect(p.x * P, p.y * P, P, P);
+    }
+    ctx.globalAlpha = 1;
+  };
+  if (instant || reduceMotion) return paint(Infinity);
+  const start = performance.now(), end = sprout.pixels.at(-1).t;
+  const step = (now) => { const e = now - start; paint(e); if (e < end) anim = requestAnimationFrame(step); };
+  anim = requestAnimationFrame(step);
+}
+canvas.addEventListener("click", () => { sprout = planSprout(++seed); drawSprout(); });
+
+/* ---------- playground ---------- */
+const SAMPLES = {
+  pangram: "Quiet foxes jump over blazing red maples,\nwatching dark pines sway.\n\nTHE QUICK BROWN FOX JUMPS OVER THE LAZY DOG\nthe quick brown fox jumps over the lazy dog\n0123456789 !?&@#$%*()[]{}<>+-=/\\|~^_",
+  code: "// Bitroot keeps 0/O, 1/l/I and brackets apart\nfunction grow(seed, days = 13) {\n  const garden = [];\n  for (let d = 0; d < days; d++) {\n    garden.push(seed.sprout({ water: d % 2 === 0 }));\n  }\n  return garden.filter((p) => p?.alive || p.roots > 0x1F);\n}",
+  notes: "FIELD NOTES · 24 November\n\nFound a patch of Bitroot growing between two\nterminals. Stems 5px, sprouts 7px, roots 3px.\nThe accents grow in a canopy above the capitals,\nso nothing touches the line above.\n\nCondition: crisp. Will return at 30px.",
+  accents: "Ça pousse ! Über-grün. ¡Qué rábano!\nSmörgåsbord, façade, naïve, déjà vu.\n« Les racines sont profondes. »\nÀÁÂÃÄÅ ÈÉÊË ÌÍÎÏ ÒÓÔÕÖØ ÙÚÛÜ Ñ Ç Ý\nàáâãäå èéêë ìíîï òóôõöø ùúûü ñ ç ýÿ ß",
+  glyphs: "",
+};
+const pg = $("#pg");
+const state = { k: 2, stage: "paper", grid: "none" };
+function applyPlayground() {
+  const P = px(state.k);
+  Object.assign(pg.style, { fontSize: P * 10 + "px", lineHeight: P * 13 + "px" });
+  const line = (dir, a) => `linear-gradient(${dir}, color-mix(in srgb, currentColor ${a}%, transparent) 1px, transparent 1px)`;
+  if (state.grid === "none") pg.style.backgroundImage = "none";
+  else {
+    pg.style.backgroundImage = `${line("to bottom", 18)}, ${line("to right", 18)}`;
+    pg.style.backgroundSize = state.grid === "cells" ? `${P * 6}px ${P * 13}px` : `${P}px ${P}px`;
+  }
+  pg.dataset.stage = state.stage;
+  for (const b of $$("[data-k]")) b.setAttribute("aria-pressed", String(+b.dataset.k === state.k));
+  for (const b of $$("[data-stage]")) b.setAttribute("aria-pressed", String(b.dataset.stage === state.stage));
+  for (const b of $$("[data-grid]")) b.setAttribute("aria-pressed", String(b.dataset.grid === state.grid));
+  const lines = pg.value.split("\n").length, chars = [...pg.value].length;
+  $("#pg-status").textContent = `${state.k * 10}px · one font pixel = ${Math.round(P * dpr())} screen px · ${lines} lines · ${chars} characters`;
+}
+$$("[data-k]").forEach((b) => b.addEventListener("click", () => { state.k = +b.dataset.k; applyPlayground(); }));
+$$("[data-stage]").forEach((b) => b.addEventListener("click", () => { state.stage = b.dataset.stage; applyPlayground(); }));
+$$("[data-grid]").forEach((b) => b.addEventListener("click", () => { state.grid = b.dataset.grid; applyPlayground(); }));
+$$("[data-sample]").forEach((b) => b.addEventListener("click", () => { pg.value = SAMPLES[b.dataset.sample]; applyPlayground(); pg.focus(); }));
+pg.addEventListener("input", applyPlayground);
+pg.value = SAMPLES.pangram;
+
+/* ---------- collection ---------- */
+let glyphs = [], current = 0;
+function showGlyph(i) {
+  current = i;
+  const [ch, name] = glyphs[i];
+  const hex = ch.codePointAt(0).toString(16).toUpperCase().padStart(4, "0");
+  $("#big").textContent = ch;
+  $("#c-no").textContent = `${String(i + 1).padStart(3, "0")} of ${glyphs.length}`;
+  $("#c-code").textContent = `U+${hex}`;
+  $("#c-name").textContent = name.toLowerCase();
+  $("#c-html").textContent = `&#x${hex};`;
+  for (const b of $$("#grid button")) b.setAttribute("aria-pressed", String(+b.dataset.i === i));
+}
+function renderGrid(filter) {
+  $("#grid").innerHTML = glyphs.map(([ch, name, kind], i) =>
+    filter === "all" || filter === kind ? `<button type="button" data-i="${i}" aria-label="${esc(name.toLowerCase())}">${esc(ch)}</button>` : "").join("");
+  for (const b of $$("[data-filter]")) b.setAttribute("aria-pressed", String(b.dataset.filter === filter));
+  showGlyph(current);
+}
+$("#grid").addEventListener("click", (e) => { const b = e.target.closest("button"); if (b) showGlyph(+b.dataset.i); });
+$$("[data-filter]").forEach((b) => b.addEventListener("click", () => renderGrid(b.dataset.filter)));
+$("#c-copy").addEventListener("click", async () => {
+  try { await navigator.clipboard.writeText(glyphs[current][0]); $("#c-copy").textContent = "copied!"; }
+  catch { $("#c-copy").textContent = "copy failed"; }
+  setTimeout(() => ($("#c-copy").textContent = "copy glyph"), 1200);
+});
+
+/* ---------- greenhouse shell ---------- */
+const PLANTS = { // four stages each: 4 rows above the soil, 2 rows below; 9 columns wide
+  radish: [
+    ["", "", "", ""], ["", "", "", "    ,    "], ["", "", "   \\ /   ", "    |    "], ["", "  \\\\ //  ", "  \\\\|//  ", "    |    "],
+  ],
+  fern: [
+    ["", "", "", "    .    "], ["", "", "    ,    ", "    |    "], ["", "  \\ | /  ", "   \\|/   ", "    |    "], [" \\  |  / ", "--\\ | /--", "  -\\|/-  ", "    |    "],
+  ],
+  cactus: [
+    ["", "", "", "    .    "], ["", "", "    _    ", "   | |   "], ["    _    ", " _ | |   ", "| || |   ", " \\_| |   "], ["    _    ", " _ | | _ ", "| || || |", " \\_| |_/ "],
+  ],
+  sunflower: [
+    ["", "", "", "    .    "], ["", "", "    o    ", "    |    "], ["", "   (o)   ", "   \\|    ", "    |/   "], ["  .-*-.  ", " ( (@) ) ", "  '-|-'  ", "   \\|/   "],
+  ],
+};
+const ROOTS = { radish: [["    .    ", ""], ["    o    ", ""], ["   (o)   ", "    '    "], ["  (OOO)  ", "   'v'   "]],
+  fern: [["    '    ", ""], ["   /|    ", ""], ["   /|\\   ", "    '    "], ["  //|\\\\  ", "   / \\   "]],
+  cactus: [["    .    ", ""], ["   '|'   ", ""], ["  '-|-'  ", ""], [" --'|'-- ", "    '    "]],
+  sunflower: [["    .    ", ""], ["   '|'   ", ""], ["  / | \\  ", "    '    "], [" / /|\\ \\ ", "  ' | '  "]] };
+const garden = [];
+const out = $("#sh-out"), input = $("#sh-in"), history = []; let hIndex = 0;
+const say = (html) => { out.innerHTML += html + "\n"; out.scrollTop = out.scrollHeight; };
+const pad9 = (s) => (s + " ".repeat(9)).slice(0, 9);
+
+function drawGarden() {
+  if (!garden.length) return say('<span class="d">The beds are empty. Try: plant radish</span>');
+  const rows = [];
+  for (let r = 0; r < 4; r++) rows.push(garden.map((g) => `<span class="m">${esc(pad9(PLANTS[g.type][g.stage][r]))}</span>`).join(" "));
+  rows.push(garden.map(() => '<span class="s">~~~~~~~~~</span>').join(" "));
+  for (let r = 0; r < 2; r++) rows.push(garden.map((g) => `<span class="r">${esc(pad9(ROOTS[g.type][g.stage][r]))}</span>`).join(" "));
+  rows.push(garden.map((g) => `<span class="d">${esc(pad9(g.type))}</span>`).join(" "));
+  say(rows.join("\n"));
+}
+const COMMANDS = {
+  help: () => say([
+    '<span class="y">commands</span>',
+    "  plant &lt;seed&gt;   sow radish, fern, cactus or sunflower",
+    "  water          help everything grow a stage",
+    "  garden         look at the beds",
+    "  harvest        pick whatever is fully grown",
+    "  fetch          facts about this font",
+    "  ls, whoami, date, clear",
+  ].join("\n")),
+  plant: (arg) => {
+    if (!PLANTS[arg]) return say(`<span class="r">unknown seed:</span> ${esc(arg || "(none)")}. Try radish, fern, cactus or sunflower.`);
+    if (garden.length >= 6) return say('<span class="r">the beds are full.</span> Try: harvest');
+    garden.push({ type: arg, stage: 0 });
+    say(`Sowed a ${esc(arg)} seed, 1px deep.`);
+    drawGarden();
+  },
+  water: () => {
+    if (!garden.length) return say('<span class="d">You water bare soil. It smells nice.</span>');
+    garden.forEach((g) => (g.stage = Math.min(3, g.stage + 1)));
+    say("Watered. Things are growing.");
+    drawGarden();
+  },
+  garden: drawGarden,
+  harvest: () => {
+    const ripe = garden.filter((g) => g.stage === 3);
+    if (!ripe.length) return say('<span class="d">Nothing is ready. Water a little more.</span>');
+    for (const g of ripe) garden.splice(garden.indexOf(g), 1);
+    say(`Harvested ${ripe.map((g) => g.type).join(", ")}. <span class="y">+${ripe.length * 13} crispness</span>`);
+  },
+  ls: () => say(garden.length ? garden.map((g, i) => `bed-${i + 1}/  ${g.type}  stage ${g.stage}/3`).join("\n") : "seeds/  README"),
+  whoami: () => say("root (of course)"),
+  sudo: () => say("You are already root."),
+  date: () => say(new Date().toDateString() + " · good growing weather"),
+  cat: (arg) => say(arg === "README" ? "Bitroot: a monospaced pixel font, grown on a 5x13 grid.\nPlant it anywhere. Water occasionally." : `cat: ${esc(arg || "")}: no such file`),
+  clear: () => (out.innerHTML = ""),
+  fetch: () => say([
+    `<span class="m">   \\ | /   </span>  <span class="p">root@greenhouse</span>`,
+    `<span class="m">    \\|/    </span>  ---------------`,
+    `<span class="r">   (OOO)   </span>  <span class="y">font</span>     Bitroot ${esc(version)}`,
+    `<span class="r">    'v'    </span>  <span class="y">cell</span>     5x13 px, 6px advance`,
+    `             <span class="y">glyphs</span>   ${glyphs.length || 181}`,
+    `             <span class="y">sizes</span>    10, 20, 30px...`,
+    `             <span class="y">license</span>  SIL OFL 1.1`,
+  ].join("\n")),
+};
+$("#sh-form").addEventListener("submit", (e) => {
+  e.preventDefault();
+  const line = input.value.trim();
+  input.value = "";
+  say(`<span class="p">root@greenhouse:~$</span> ${esc(line)}`);
+  if (!line) return;
+  history.push(line); hIndex = history.length;
+  const [cmd, ...rest] = line.split(/\s+/);
+  if (cmd === "rm") return say('<span class="r">Nice try.</span> The roots go deeper than that.');
+  (COMMANDS[cmd.toLowerCase()] || (() => say(`command not found: ${esc(cmd)}. Try <span class="y">help</span>.`)))(rest.join(" ").toLowerCase());
+});
+input.addEventListener("keydown", (e) => {
+  if (e.key === "ArrowUp" && hIndex > 0) input.value = history[--hIndex];
+  else if (e.key === "ArrowDown") input.value = history[++hIndex] ?? (hIndex = history.length, "");
+  else return;
+  e.preventDefault();
+});
+$("#shell").addEventListener("click", () => input.focus({ preventScroll: true }));
+// the block cursor follows the caret, but stays inside the visible part of the input
+const moveCaret = () => {
+  const fits = Math.floor(input.clientWidth / (6 * px(2))) - 1;
+  $(".caret").style.setProperty("--n", Math.max(0, Math.min(input.selectionStart ?? input.value.length, fits)));
+};
+for (const ev of ["input", "keyup", "click", "focus", "select"]) input.addEventListener(ev, moveCaret);
+say('Welcome to the greenhouse. Type <span class="y">help</span>, or try <span class="y">plant cactus</span> then <span class="y">water</span> a few times.\n');
+garden.push({ type: "sunflower", stage: 3 }, { type: "radish", stage: 3 }, { type: "fern", stage: 2 });
+drawGarden();
+
+/* ---------- almanac: this month's calendar ---------- */
+(function almanac() {
+  const now = new Date(), y = now.getFullYear(), m = now.getMonth();
+  const month = now.toLocaleString("en", { month: "long" }).toUpperCase();
+  const first = (new Date(y, m, 1).getDay() + 6) % 7; // Monday = 0
+  const days = new Date(y, m + 1, 0).getDate();
+  const cells = Array(first).fill("   ").concat([...Array(days)].map((_, i) => {
+    const d = String(i + 1).padStart(3);
+    return i + 1 === now.getDate() ? `<span class="today">${d}</span>` : d;
+  }));
+  const weeks = [];
+  for (let i = 0; i < cells.length; i += 7) weeks.push(cells.slice(i, i + 7).join(""));
+  const title = `GROWING ALMANAC · ${month} ${y}`;
+  $("#almanac").innerHTML = [
+    title,
+    "-".repeat(title.length),
+    '<span class="wk"> Mo Tu We Th Fr Sa Su</span>',
+    ...weeks,
+    "",
+    "Sow: radish, fern",
+    "Frost risk: 2°C",
+  ].join("\n");
+})();
+
+/* ---------- harvest ---------- */
+function renderSnippet() {
+  $("#css-snippet").textContent = `@font-face {\n  font-family: "Bitroot";\n  src: url("https://cdn.jsdelivr.net/gh/serialexperimentsrio/bitroot@v${version}/bitroot.woff2") format("woff2");\n}\n\nbody {\n  font-family: "Bitroot", monospace;\n  font-size: 20px;\n}`;
+}
+$("#css-copy").addEventListener("click", async () => {
+  try { await navigator.clipboard.writeText($("#css-snippet").textContent); $("#css-copy").textContent = "copied!"; }
+  catch { $("#css-copy").textContent = "copy failed"; }
+  setTimeout(() => ($("#css-copy").textContent = "copy"), 1200);
+});
+
+/* ---------- pixel sprites: 12x13, the same cell as two characters ---------- */
+const SPRITES = {
+  pencil: ["", "", "         ##", "        #yy#", "       #yy#", "      #yy#", "     #yy#", "    #yy#", "   #yy#", "  ##y#", "  ###", "", ""],
+  seedling: ["", "", "", " ss     ss", "ssss   ssss", " ssss ssss", "   ssgss", "     g", "     g", "     g", "bbbbbgbbbbbb", "    r r", "   r   r"],
+  lens: ["", "", "  ####", " #    #", "#  k   #", "# k    #", "#      #", " #    #", "  #### #", "       ##", "        ##", "         ##", ""],
+  mushroom: ["", "", "   rrrrrr", " rrryrrrrrr", "rrrrrrrryrrr", "rryrrrrrrrrr", "  ########", "   #yyyy#", "   #yyyy#", "   #yyyy#", "bbbbbbbbbbbb", "", ""],
+  greenhouse: ["", "", "     ##", "    #kk#", "   #kkkk#", "  #kkkkkk#", " ##########", " #ss#kk#kk#", " #kk#ss#kk#", " #kk#kk#ss#", "bbbbbbbbbbbb", "", ""],
+  radish: ["", "   g   g", "   gg gg", "    ggg", "     g", "   rrrrr", "  rrrrrrr", "  rrryrrr", "  rrrrrrr", "   rrrrr", "    rrr", "     r", "     r"],
+};
+const GRASS = ["", "", "", "", "", "", "", "",
+  "    s           s",
+  " s  s     s     s  s",
+  " s ss  s  s s  ss  s  s",
+  "ss sg ss gs s gsg sg sgs",
+  "gggggggggggggggggggggggg"];
+const PAL = { "#": "--ink", g: "--moss", s: "--sprout", r: "--root", b: "--soil", y: "--label", k: "--sky" };
+function sprite(rows, w = 12) {
+  const paths = {};
+  rows.forEach((row, y) => [...row].forEach((ch, x) => { if (PAL[ch]) (paths[ch] ??= []).push(`M${x} ${y}h1v1h-1z`); }));
+  const fill = (ch) => (ch === "k" ? "#a9c3d1" : css(PAL[ch]));
+  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${w} ${rows.length}" shape-rendering="crispEdges">` +
+    Object.entries(paths).map(([ch, d]) => `<path fill="${fill(ch)}" d="${d.join("")}"/>`).join("") + "</svg>";
+}
+$$("[data-sprite]").forEach((e) => (e.innerHTML = sprite(SPRITES[e.dataset.sprite])));
+$("link[rel=icon]").href = "data:image/svg+xml," + encodeURIComponent(sprite(SPRITES.seedling));
+document.documentElement.style.setProperty("--grass", `url("data:image/svg+xml,${encodeURIComponent(sprite(GRASS, 24))}")`);
+
+/* ---------- start ---------- */
+(async function start() {
+  layout();
+  try {
+    const data = await (await fetch("glyphs.json")).json();
+    version = data.version; glyphs = data.glyphs;
+    SAMPLES.glyphs = glyphs.map((g) => g[0]).join("").replace(/(.{36})/gu, "$1\n");
+  } catch { glyphs = [...SAMPLES.pangram.replace(/\s/g, "")].filter((c, i, a) => a.indexOf(c) === i).map((c) => [c, "", "letter"]); }
+  $$("[data-version]").forEach((e) => (e.textContent = "v" + version));
+  $$("[data-version-plain]").forEach((e) => (e.textContent = version));
+  $$("[data-count]").forEach((e) => (e.textContent = glyphs.length));
+  current = Math.max(0, glyphs.findIndex((g) => g[0] === "g"));
+  renderGrid("all");
+  renderSnippet();
+  await document.fonts.load("10px Bitroot");
+  sprout = planSprout(seed);
+  drawSprout();
+  centreAnatomy();
+  window.addEventListener("resize", layout);
+})();
+</script>
+</body>
+</html>

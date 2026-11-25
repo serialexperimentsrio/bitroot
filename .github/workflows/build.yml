@@ -17,6 +17,22 @@ jobs:
       - run: python build.py
       - name: Committed fonts match the Aseprite source
         run: git diff --exit-code -- bitroot.ttf bitroot.woff2
+      # PNG bytes can differ between zlib builds, so the images are compared pixel by pixel
+      - name: Committed README images and site data match the source
+        run: |
+          git diff --exit-code -- site/glyphs.json
+          python - <<'EOF'
+          import io, pathlib, subprocess
+          from PIL import Image
+          stale = []
+          for p in sorted(pathlib.Path("images").glob("*.png")):
+              old = subprocess.run(["git", "show", f"HEAD:{p.as_posix()}"], capture_output=True).stdout
+              pixels = lambda im: (im.size, im.convert("RGBA").tobytes())
+              if not old or pixels(Image.open(io.BytesIO(old))) != pixels(Image.open(p)):
+                  stale.append(p.as_posix())
+          if stale:
+              raise SystemExit("Run python build.py and commit: " + ", ".join(stale))
+          EOF
 
       - name: Publish release for v* tags
         if: startsWith(github.ref, 'refs/tags/v')
@@ -35,3 +51,25 @@ jobs:
           else
             gh release create "$GITHUB_REF_NAME" "$zipfile" --title "Bitroot $version" --generate-notes $pre
           fi
+
+  # Publishes the specimen site (site/ plus the fonts) to GitHub Pages.
+  # Needs Settings -> Pages -> Source: "GitHub Actions" turned on once.
+  pages:
+    if: github.ref == 'refs/heads/main'
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v5
+      - run: mkdir _site && cp -r site/. _site/ && cp bitroot.ttf bitroot.woff2 _site/
+      - uses: actions/upload-pages-artifact@v5
+        with:
+          path: _site
+      - id: deploy
+        uses: actions/deploy-pages@v5

@@ -1,4 +1,4 @@
-"""Build bitroot.ttf, bitroot.woff2 and preview.png from src/bitroot-typeface.aseprite.
+"""Build bitroot.ttf, bitroot.woff2, the README images and the site data from src/bitroot-typeface.aseprite.
 
     pip install -r requirements.txt
     python build.py
@@ -15,7 +15,7 @@ from fontTools.pens.pointInsidePen import PointInsidePen
 from fontTools.pens.ttGlyphPen import TTGlyphPen
 from fontTools.ttLib import TTFont
 from fontTools.ttLib.tables.O_S_2f_2 import Panose
-from PIL import Image
+from PIL import Image, ImageColor, ImageDraw
 
 ROOT = Path(__file__).parent
 CFG = json.loads((ROOT / "src/font.json").read_text("utf-8"))
@@ -205,56 +205,233 @@ def stale_accents(bms):
     return out
 
 
-def build_preview(bms, grid_cell, path, scale=10):
-    """Glyphs in pairs (Aa Bb … then everything else in sheet order) on a checkerboard."""
+# ---------- README images ----------
+# Drawn straight from the glyph bitmaps, on the same grid as the specimen site: a column is one character
+# (6 font pixels) and a row is one line (13 font pixels) of 20px text. Coordinates below are in those font
+# pixels. Images are saved at twice the size the README shows them (width = columns x 12), so they stay
+# sharp on high-density screens and scale down by exactly half everywhere else.
+P = 4  # image pixels per font pixel of 20px text
+COLS = 66
+RGB = {"paper": "#f2eddf", "grid": "#e6dfcb", "ink": "#1d2419", "muted": "#6d6a55", "moss": "#4c7a33", "sprout": "#7fb24a",
+       "soil": "#8a5a35", "root": "#b4532a", "label": "#f6e6a2", "sky": "#3d6b8a"}
+
+
+def rgb(c):
+    return c if isinstance(c, tuple) else ImageColor.getrgb(RGB.get(c, c))
+
+
+def mix(a, b, t):
+    return tuple(round(x + (y - x) * t) for x, y in zip(rgb(a), rgb(b)))
+
+
+class Sheet:
+    """Grid paper. Frames are one font pixel thick and centred on grid lines, with their corner pixels cut away."""
+
+    def __init__(self, bms, rows, cols=COLS):
+        self.bms, self.w, self.h = bms, cols * 6, rows * 13
+        self.img = Image.new("RGBA", (self.w * P, self.h * P))
+        self.draw = ImageDraw.Draw(self.img)
+        self.rect(0, 0, self.w, self.h, "paper")
+        for x in range(0, self.w, 6):
+            self.rect(x, 0, .5, self.h, "grid")
+        for y in range(0, self.h, 13):
+            self.rect(0, y, self.w, .5, "grid")
+
+    def rect(self, x, y, w, h, colour):
+        x0, y0, x1, y1 = (round(v * P) for v in (x, y, x + w, y + h))
+        if x1 > x0 and y1 > y0:
+            self.draw.rectangle((x0, y0, x1 - 1, y1 - 1), fill=rgb(colour))
+
+    def notch(self, x, y):
+        """Cut the corner pixel at grid point (x, y) back to bare grid paper."""
+        self.rect(x - .5, y - .5, 1, 1, "paper")
+        if x % 6 == 0:
+            self.rect(x, y - .5, .5, 1, "grid")
+        if y % 13 == 0:
+            self.rect(x - .5, y, 1, .5, "grid")
+
+    def frame(self, x, y, w, h, notch=True):
+        for args in ((x - .5, y - .5, w + 1, 1), (x - .5, y + h - .5, w + 1, 1), (x - .5, y - .5, 1, h + 1), (x + w - .5, y - .5, 1, h + 1)):
+            self.rect(*args, "ink")
+        if notch:
+            for corner in ((x, y), (x + w, y), (x, y + h), (x + w, y + h)):
+                self.notch(*corner)
+
+    def box(self, col, row, cols, rows, fill):
+        x, y, w, h = col * 6, row * 13, cols * 6, rows * 13
+        self.rect(x, y, w, h, fill)
+        self.frame(x, y, w, h)
+        return x, y
+
+    def text(self, x, y, s, colour="ink", px=1):
+        """Draw s (a string, or a list of (string, colour) runs) with its first character cell at (x, y)."""
+        runs = [(s, colour)] if isinstance(s, str) else s
+        n = sum(len(r) for r, _ in runs)
+        assert x + n * 6 * px <= self.w, f"text runs off the image: {s!r}"
+        i = 0
+        for run, c in runs:
+            for ch in run:
+                for gx, gy in self.bms.get(ch, ()):
+                    self.rect(x + (i * 6 + gx) * px, y + (BASE - 1 - gy) * px, px, px, c)
+                i += 1
+
+    def save(self, path):
+        w, h = self.w, self.h  # the image edge gets a frame too, with transparent corner pixels
+        for args in ((0, 0, w, 1), (0, h - 1, w, 1), (0, 0, 1, h), (w - 1, 0, 1, h)):
+            self.rect(*args, "ink")
+        for x, y in ((0, 0), (w - 1, 0), (0, h - 1), (w - 1, h - 1)):
+            self.rect(x, y, 1, 1, (0, 0, 0, 0))
+        self.img.save(path, optimize=True)
+
+
+def build_specimen(bms, path):
+    """The name, a spec sheet, and the font in use in code and a terminal."""
+    s = Sheet(bms, rows=20)
+    s.text(12, 13, "Bitroot", px=6)  # each font pixel is 6x6, so each letter covers 6x6 grid cells
+    specs = [("version", CFG["version"]), ("cell", f"{CW}×{CH} px"), ("advance", f"{CW + CFG['spacing']} px"),
+             ("glyphs", str(sum(not c.isspace() for c in bms))), ("formats", "TTF, WOFF2"), ("license", "OFL 1.1")]
+    for i, (k, v) in enumerate(specs):
+        s.text(46 * 6, (1 + i) * 13, [(k.ljust(8), "muted"), (v, "ink")])
+    s.text(12, 8 * 13, "A monospaced pixel font for code, terminals and small screens.")
+
+    K, F, N, S_, C, T = "#ff9f6b", "#79c0e6", "#e6c86e", "#b8db7a", "#8a8f7a", "#e6e1cf"
+    code = [
+        [("fn", K), (" ", T), ("main", F), ("() {", T)],
+        [("    let", K), (" x = ", T), ("0x1F", N), ("; ", T), ("// 0O 1lI", C)],
+        [("    if", K), (" x != ", T), ("0", N), (" && x <= ", T), ("31", N), (" {", T)],
+        [("        println!", F), ("(", T), ('"{x}"', S_), (");", T)],
+        [("    }", T)],
+        [("}", T)],
+    ]
+    sizes = {f: (ROOT / f).stat().st_size for f in ("bitroot.ttf", "bitroot.woff2")}
+    width = len(str(sum(sizes.values()))) + 1
+    G, T2 = "#7dff8a", "#b7f5bd"
+    term = [
+        [("$ ", G), ("python build.py", T2)],
+        [(f"built {sum(not c.isspace() for c in bms)} glyphs", T2)],
+        [("$ ", G), ("wc -c bitroot.*", T2)],
+        *[[(f"{n:>{width}} {f}", T2)] for f, n in sizes.items()],
+        [(f"{sum(sizes.values()):>{width}} total", T2)],
+    ]
+    for col, bg, lines, caption in ((2, "#1b1f17", code, "0/O and 1/l/I stay distinct"), (34, "#08110a", term, "Output lines up in columns")):
+        x, y = s.box(col, 10, 30, 8, bg)
+        for i, line in enumerate(lines):
+            s.text(x + 12, y + 13 * (i + 1), line)
+        s.text(x, 18 * 13, caption, "muted")
+    s.save(path)
+
+
+def build_metrics(bms, path):
+    """Three glyphs drawn large on their pixel grid, with the vertical metrics marked."""
+    Z, x0, y0, word = 13, 12, 13, "Åbg"  # Z grid units per font pixel, so each pixel row is exactly one grid row
+    s = Sheet(bms, rows=19)
+    w, h = len(word) * 6 * Z, CH * Z
+    bands = [(0, BASE - CAP, mix("paper", "sky", .18)), (BASE - CAP, BASE - CFG["x-height"], mix("paper", "sprout", .22)),
+             (BASE - CFG["x-height"], BASE, mix("paper", "moss", .18)), (BASE, CH, mix("paper", "soil", .28))]
+    for top, bottom, colour in bands:
+        s.rect(x0, y0 + top * Z, w, (bottom - top) * Z, colour)
+        for cell in range(len(word)):  # the spacing column after each glyph is dithered
+            for r in range(top * Z, bottom * Z):
+                for c in range(Z):
+                    if (r + c) % 2:
+                        s.rect(x0 + (cell * 6 + CW) * Z + c, y0 + r, 1, 1, mix(colour, "ink", .07))
+        line = mix(colour, "ink", .14)
+        for gx in range(0, w, Z):
+            s.rect(x0 + gx, y0 + top * Z, .5, (bottom - top) * Z, line)
+        for gy in range(top, bottom):
+            s.rect(x0, y0 + gy * Z, w, .5, line)
+    s.text(x0, y0, word, px=Z)
+    s.rect(x0, y0 + BASE * Z - .5, 53 * 6 - x0, 1, "root")  # baseline, carried under its label
+    s.frame(x0, y0, w, h)
+
+    def bracket(col, top, bottom):
+        x, ya, yb = col * 6 + 3, y0 + top * Z, y0 + bottom * Z
+        s.rect(x, ya + 2, 1, yb - ya - 4, "ink")
+        s.rect(x - 3, ya + 2, 3, 1, "ink")
+        s.rect(x - 3, yb - 3, 3, 1, "ink")
+
+    bracket(43, 0, BASE - CAP)
+    bracket(42, BASE - CAP, BASE)
+    bracket(43, BASE - CFG["x-height"], BASE)
+    bracket(43, BASE, CH)
+    labels = [(1, "accent space", BASE - CAP), (4, "cap height", CAP), (7, "x-height", CFG["x-height"]), (11, "descender", CH - BASE)]
+    for row, name, size in labels:
+        s.text(45 * 6, y0 + row * 13, [(name.ljust(14), "ink"), (f"{size}px", "moss")])
+    s.text(45 * 6, y0 + BASE * 13, "baseline", "root")
+
+    y = 15 * 13  # the advance, measured under the first glyph
+    s.rect(x0, y - .5, 6 * Z, 1, "ink")
+    for x in (x0, x0 + CW * Z, x0 + 6 * Z):
+        s.rect(x - .5, y - 3, 1, 6, "ink")
+    s.text(x0, y, [("advance ", "ink"), (f"{CW + CFG['spacing']}px", "moss")])
+    s.text(x0, y + 13, f"{CW}px glyph + {CFG['spacing']}px spacing", "muted")
+    table = [("units per em", CFG["em"] * U), ("ascent", BASE * U), ("descent", (CH - BASE) * U), ("line gap", 0)]
+    for i, (k, v) in enumerate(table):
+        s.text(45 * 6, (14 + i) * 13, [(k.ljust(14), "muted"), (str(v).rjust(3), "ink")])
+    s.save(path)
+
+
+def build_sizes(bms, path):
+    """The same text at 10, 20, 30 and 40px, each label sitting on its sample's baseline."""
+    s = Sheet(bms, rows=13)
+    samples = [(1, .5, "The quick brown fox jumps over the lazy dog. 0123456789 !?&@#$%*()[]{}"),
+               (3, 1, "The quick brown fox jumps over the lazy dog."),
+               (6, 1.5, "The quick brown fox jumps"),
+               (10, 2, "Bitroot 0123456789")]
+    for row, px, text in samples:
+        baseline = row * 13 + BASE
+        s.text(12, row * 13, f"{round(px * 20)}px", "muted")
+        s.text(48, baseline - BASE * px, text, px=px)
+    s.save(path)
+
+
+def build_charset(bms, path):
+    """Every glyph at 30px in a table, grouped by Unicode block, with the baseline marked in each cell."""
     chars = [c for row in CFG["rows"] for c in row if not c.isspace()]
-    pairs = [u + u.lower() for u in chars if u.isupper() and u.lower() in chars]
-    rest = [c for c in chars if not any(c in p for p in pairs)]
-    pairs += ["".join(rest[i:i + 2]) for i in range(0, len(rest), 2)]
-    pairs.sort(key=lambda p: chars.index(p[0]))
-    cols, box, box_h = 13, 16, CH + 6
-    img = Image.new("RGBA", (cols * box, -(-len(pairs) // cols) * box_h))
-    for i, pair in enumerate(pairs):
-        cx, cy = i % cols * box, i // cols * box_h
-        shade = 77 if (i % cols + i // cols) % 2 == 0 else 57
-        img.paste((shade, shade, shade, 255), (cx, cy, cx + box, cy + box_h))
-        for k, ch in enumerate(pair):
-            x0, y0 = cx + 2 + k * (CW + 2), cy + 3
-            img.alpha_composite(grid_cell, (x0, y0))
-            for x, y in bms[ch]:
-                img.putpixel((x0 + x, y0 + BASE - 1 - y), (255, 255, 255, 255))
-    img.resize((img.width * scale, img.height * scale), Image.NEAREST).convert("RGB").save(path, optimize=True)
+    ascii_ = [c for c in chars if ord(c) < 128]
+    groups = [("Basic Latin: capitals", [c for c in ascii_ if c.isupper()]),
+              ("Basic Latin: lowercase", [c for c in ascii_ if c.islower()]),
+              ("Basic Latin: figures and punctuation", [c for c in ascii_ if not c.isalpha()]),
+              ("Latin-1: letters", [c for c in chars if ord(c) >= 128 and c.isalpha()]),
+              ("Latin-1 and General Punctuation: symbols", [c for c in chars if ord(c) >= 128 and not c.isalpha()])]
+    assert sum(len(g) for _, g in groups) == len(chars)
+    per_row, cw, rh, px = 20, 18, 26, 1.5  # a cell is 3 columns by 2 rows; the 9x19.5 glyph cell sits inside it
+    s = Sheet(bms, rows=1 + sum(2 + 2 * -(-len(g) // per_row) for _, g in groups))  # heading, cells, blank row
+    row = 1
+    for name, glyphs in groups:
+        s.text(18, row * 13, [(name, "ink"), (f"  {len(glyphs)}", "moss")])
+        x0, y0 = 18, (row + 1) * 13
+        guide = mix("paper", "root", .35)
+        for i, ch in enumerate(glyphs):
+            x, y = x0 + i % per_row * cw, y0 + i // per_row * rh
+            s.rect(x, y, cw, rh, "paper")
+            s.rect(x, y + 3 + BASE * px, cw, .5, guide)
+            s.text(x + 4.5, y + 3, ch, px=px)
+        for i in range(len(glyphs)):
+            s.frame(x0 + i % per_row * cw, y0 + i // per_row * rh, cw, rh, notch=False)
+        rows = -(-len(glyphs) // per_row)
+        last = (len(glyphs) - 1) % per_row + 1
+        full = min(len(glyphs), per_row) * cw
+        for corner in ((x0, y0), (x0 + full, y0), (x0, y0 + rows * rh), (x0 + last * cw, y0 + rows * rh), (x0 + full, y0 + (rows - 1) * rh)):
+            s.notch(*corner)
+        row += 2 + 2 * rows
+    s.save(path)
 
 
-SPECIMEN = [  # (text, font size in px, colour) - sizes are multiples of 10 so every pixel stays sharp
-    ("Bitroot", 30, (246, 153, 136)),
-    ("Quiet foxes jump over blazing red maples,", 10, (255, 255, 255)),
-    ("watching dark pines sway.", 10, (255, 255, 255)),
-    ("", 10, None),
-    ("THE QUICK BROWN FOX JUMPS OVER THE LAZY DOG", 10, (176, 190, 197)),
-    ("0123456789 !?&@#$%*()[]{}<>+-=/\\|~^_", 10, (176, 190, 197)),
-    ("Ça va? Über naïve façade — «déjà vu», ±5°", 10, (176, 190, 197)),
-    ("", 10, None),
-    ('if (list[i] != 0 && flags | 0x1F) return "ok";', 10, (114, 213, 114)),
-]
+def write_site_data(path):
+    """Glyph list for the specimen site (site/index.html), in sheet order."""
+    import unicodedata
 
+    def kind(ch):
+        if unicodedata.category(ch).startswith("N"):
+            return "figure"
+        if not ch.isalpha():
+            return "symbol"
+        return "accented" if len(unicodedata.normalize("NFD", ch)) > 1 else "letter"
 
-def build_specimen(font_path, path, scale=4, pad=10):
-    """Sample text drawn with the built font itself, so the image always matches the font."""
-    from PIL import ImageDraw, ImageFont
-    fonts = {size: ImageFont.truetype(str(font_path), size) for _, size, _ in SPECIMEN}
-    line_h = lambda size: size * (CH) // CFG["em"]  # 13px per 10px of font size
-    width = max(int(fonts[s].getlength(t)) for t, s, _ in SPECIMEN) + 2 * pad
-    height = sum(line_h(s) for _, s, _ in SPECIMEN) + 2 * pad
-    img = Image.new("RGB", (width, height), (36, 36, 40))
-    draw = ImageDraw.Draw(img)
-    draw.fontmode = "1"  # no anti-aliasing: whole pixels only
-    y = pad
-    for text, size, colour in SPECIMEN:
-        if text:
-            draw.text((pad, y), text, font=fonts[size], fill=colour, anchor="la")
-        y += line_h(size)
-    img.resize((width * scale, height * scale), Image.NEAREST).save(path, optimize=True)
+    chars = [c for row in CFG["rows"] for c in row if not c.isspace()]
+    data = {"version": CFG["version"], "glyphs": [[c, unicodedata.name(c, ""), kind(c)] for c in chars]}
+    Path(path).write_text(json.dumps(data, ensure_ascii=False, indent=0) + "\n", "utf-8", newline="\n")
 
 
 def main():
@@ -269,13 +446,14 @@ def main():
     font.flavor = "woff2"
     font.save(ROOT / "bitroot.woff2")
 
-    gx, gy, grid = cels["Grid"]
-    ox, oy = CFG["cell-offset"] - gx, CFG["cell-offset"] - gy
-    cell = grid.crop((ox, oy, ox + CW, oy + CH))
-    cell.putalpha(cell.getchannel("A").point(lambda a: a * 2 // 5))  # the Grid layer is drawn at ~40% opacity
-    build_preview(bms, cell, ROOT / "preview.png")
-    build_specimen(ROOT / "bitroot.ttf", ROOT / "specimen.png")
-    print(f"built {len(bms)} glyphs")
+    images = ROOT / "images"
+    images.mkdir(exist_ok=True)
+    build_specimen(bms, images / "specimen.png")
+    build_metrics(bms, images / "metrics.png")
+    build_sizes(bms, images / "sizes.png")
+    build_charset(bms, images / "charset.png")
+    write_site_data(ROOT / "site/glyphs.json")
+    print(f"built {sum(not c.isspace() for c in bms)} glyphs")
     if stale := stale_accents(bms):
         print("warning: redraw these to match their base letter:", ", ".join(stale))
 
