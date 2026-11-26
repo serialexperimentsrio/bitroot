@@ -125,7 +125,7 @@ python build.py
 | `build.py` | The build script. |
 | `bitroot.ttf`, `bitroot.woff2` | Built fonts, committed. |
 | `images/` | Built README images. |
-| `site/` | The specimen site. `site/glyphs.json` is built. |
+| `demo/` | The specimen site. `demo/glyphs.json` is built. |
 
 The build:
 
@@ -134,16 +134,16 @@ The build:
 3. Traces each glyph into outlines and writes `bitroot.ttf` and `bitroot.woff2`. Timestamps come from `src/font.json`, so the same source always produces byte-identical files.
 4. Checks every pixel centre of every glyph against its outline, and checks that every advance is the same.
 5. Warns when an accented letter no longer matches its base letter (for example, after redrawing `A` but not `À`), because accented letters are separate drawings.
-6. Draws the README images from the glyph bitmaps and writes `site/glyphs.json`.
+6. Draws the README images from the glyph bitmaps and writes `demo/glyphs.json`.
 
-CI runs the build on every push and fails if the committed font files don't match the `.aseprite` source. Every push to `main` also publishes `site/` to GitHub Pages. To preview the site locally, run `python -m http.server` in the repository folder and open `http://localhost:8000/site/`.
+CI runs the build on every push and fails if the committed font files don't match the `.aseprite` source. Every push to `main` also publishes `demo/` to GitHub Pages. To preview the site locally, run `python -m http.server` in the repository folder and open `http://localhost:8000/demo/`.
 
 ## Contributing
 
 1. Edit `src/bitroot-typeface.aseprite` in [Aseprite](https://www.aseprite.org/).
 2. To add a glyph, draw it in an empty cell, then add its character to `rows` in `src/font.json` at the same row and column.
 3. Run `python build.py`.
-4. Open a pull request with the `.aseprite` file, `src/font.json` (if changed), the rebuilt fonts, `images/` and `site/glyphs.json`.
+4. Open a pull request with the `.aseprite` file, `src/font.json` (if changed), the rebuilt fonts, `images/` and `demo/glyphs.json`.
 
 Write commit messages in the imperative mood, properly cased, and name the glyphs you changed (for example, "Add glyph for ampersand" or "Redraw g and y").
 

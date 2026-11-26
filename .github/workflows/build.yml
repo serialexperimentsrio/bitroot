@@ -20,7 +20,7 @@ jobs:
       # PNG bytes can differ between zlib builds, so the images are compared pixel by pixel
       - name: Committed README images and site data match the source
         run: |
-          git diff --exit-code -- site/glyphs.json
+          git diff --exit-code -- demo/glyphs.json
           python - <<'EOF'
           import io, pathlib, subprocess
           from PIL import Image
@@ -52,7 +52,7 @@ jobs:
             gh release create "$GITHUB_REF_NAME" "$zipfile" --title "Bitroot $version" --generate-notes $pre
           fi
 
-  # Publishes the specimen site (site/ plus the fonts) to GitHub Pages.
+  # Publishes the specimen site (demo/ plus the fonts) to GitHub Pages.
   # Needs Settings -> Pages -> Source: "GitHub Actions" turned on once.
   pages:
     if: github.ref == 'refs/heads/main'
@@ -67,7 +67,7 @@ jobs:
       url: ${{ steps.deploy.outputs.page_url }}
     steps:
       - uses: actions/checkout@v5
-      - run: mkdir _site && cp -r site/. _site/ && cp bitroot.ttf bitroot.woff2 _site/
+      - run: mkdir _site && cp -r demo/. _site/ && cp bitroot.ttf bitroot.woff2 _site/
       - uses: actions/upload-pages-artifact@v5
         with:
           path: _site

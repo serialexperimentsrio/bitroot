@@ -419,7 +419,7 @@ def build_charset(bms, path):
 
 
 def write_site_data(path):
-    """Glyph list for the specimen site (site/index.html), in sheet order."""
+    """Glyph list for the specimen site (demo/index.html), in sheet order."""
     import unicodedata
 
     def kind(ch):
@@ -452,7 +452,7 @@ def main():
     build_metrics(bms, images / "metrics.png")
     build_sizes(bms, images / "sizes.png")
     build_charset(bms, images / "charset.png")
-    write_site_data(ROOT / "site/glyphs.json")
+    write_site_data(ROOT / "demo/glyphs.json")
     print(f"built {sum(not c.isspace() for c in bms)} glyphs")
     if stale := stale_accents(bms):
         print("warning: redraw these to match their base letter:", ", ".join(stale))
