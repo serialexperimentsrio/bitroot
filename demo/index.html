@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Bitroot · a field guide to a pixel font</title>
-<meta name="description" content="Bitroot is a free monospaced pixel font grown on a 5×13 grid. Type in the playground, browse every glyph, and download it.">
+<title>Bitroot · a pixel font specimen</title>
+<meta name="description" content="Bitroot is a free monospaced pixel font drawn on a 5×13 grid. Try it in the playground, browse every glyph, and download it.">
 <meta name="theme-color" content="#f2eddf">
 <link rel="icon" href="data:,">
 <style>
@@ -259,8 +259,8 @@ footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; c
       <a href="#playground">playground</a>
       <a href="#anatomy">anatomy</a>
       <a href="#collection">glyphs</a>
-      <a href="#wild">in the wild</a>
-      <a href="#greenhouse">greenhouse</a>
+      <a href="#wild">examples</a>
+      <a href="#greenhouse">shell</a>
       <a href="#harvest">download</a>
     </nav>
   </div>
@@ -270,20 +270,20 @@ footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; c
 
 <section class="wrap hero" aria-labelledby="title">
   <div class="stack">
-    <p class="hero-tag">TYPE SPECIMEN · FIELD GUIDE</p>
+    <p class="hero-tag">PIXEL FONT · SPECIMEN</p>
     <h1 id="title">Bitroot</h1>
-    <canvas id="sprout" role="img" aria-label="The word Bitroot growing out of the soil, pixel by pixel, with roots spreading below"></canvas>
-    <p class="tagline s4">A monospaced pixel font,<br>grown on a 5×13 grid.</p>
+    <canvas id="sprout" role="img" aria-label="The word Bitroot appearing pixel by pixel on a 5×13 grid"></canvas>
+    <p class="tagline s4">A monospaced pixel font,<br>drawn on a 5×13 grid.</p>
     <div class="actions">
       <a class="btn solid" href="#harvest">Download 4 free</a>
       <a class="btn" href="#playground">Try it</a>
       <a class="btn" href="https://github.com/serialexperimentsrio/bitroot">GitHub</a>
     </div>
-    <p class="muted">Click the word to grow it again.</p>
+    <p class="muted">Click the word to replay the animation.</p>
   </div>
 
   <aside class="label box" aria-label="Specimen label">
-    <p class="label-title rule-b">HERBARIUM · SPECIMEN No. <span data-version-plain>0.3</span></p>
+    <p class="label-title rule-b">BITROOT · SPECIMEN No. <span data-version-plain>0.3</span></p>
     <dl>
       <dt>Name</dt><dd>Bitroot</dd>
       <dt>Latin</dt><dd><i>Typographia bitradix</i></dd>
@@ -292,11 +292,11 @@ footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; c
       <dt>Cell</dt><dd>5×13 px</dd>
       <dt>Glyphs</dt><dd data-count>181</dd>
       <dt>Habitat</dt><dd>Terminals, games, small screens</dd>
-      <dt>Grows</dt><dd>Sharp at 10, 20, 30px…</dd>
-      <dt>Collector</dt><dd>Rio</dd>
+      <dt>Scale</dt><dd>Sharp at 10, 20, 30px…</dd>
+      <dt>Designer</dt><dd>Rio</dd>
       <dt>License</dt><dd>SIL OFL 1.1</dd>
     </dl>
-    <p class="stamp">FREE TO PLANT ANYWHERE</p>
+    <p class="stamp">FREE TO USE ANYWHERE</p>
   </aside>
 </section>
 
@@ -317,13 +317,13 @@ footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; c
     <div class="seg" role="group" aria-label="Sample"><span>sample</span>
       <button type="button" data-sample="pangram">pangram</button>
       <button type="button" data-sample="code">code</button>
-      <button type="button" data-sample="notes">field notes</button>
+      <button type="button" data-sample="notes">notes</button>
       <button type="button" data-sample="accents">accents</button>
       <button type="button" data-sample="glyphs">every glyph</button>
     </div>
     <div class="seg" role="group" aria-label="Colours"><span>colours</span>
       <button type="button" data-stage="paper">paper</button>
-      <button type="button" data-stage="soil">soil</button>
+      <button type="button" data-stage="soil">earth</button>
       <button type="button" data-stage="terminal">terminal</button>
       <button type="button" data-stage="label">label</button>
     </div>
@@ -340,8 +340,8 @@ footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; c
 
 <section class="wrap plate" id="anatomy" aria-labelledby="an-title">
   <header class="plate-head">
-    <h2 class="s4 rule-b dashed" id="an-title"><span class="sprite" data-sprite="seedling" aria-hidden="true"></span> Anatomy of a seedling</h2>
-    <p>Every glyph lives in the same 5×13 plot of soil.</p>
+    <h2 class="s4 rule-b dashed" id="an-title"><span class="sprite" data-sprite="seedling" aria-hidden="true"></span> Glyph anatomy</h2>
+    <p>Every glyph fits the same 5×13 cell.</p>
   </header>
   <div class="anatomy">
     <div class="cell box" aria-hidden="true">
@@ -350,11 +350,11 @@ footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; c
       <div class="glyphs">Ågly</div>
     </div>
     <ul class="legend">
-      <li><span class="sw box" style="background: color-mix(in srgb, var(--sky) 35%, var(--paper))"></span><span><b class="sky">Canopy · 3px.</b> Where accents grow, so <span class="moss">À</span> and <span class="moss">à</span> never collide with the line above.</span></li>
-      <li><span class="sw box" style="background: color-mix(in srgb, var(--sprout) 40%, var(--paper))"></span><span><b class="moss">Sprouts · 2px.</b> Ascenders and capitals reach 7px above the soil.</span></li>
-      <li><span class="sw box" style="background: color-mix(in srgb, var(--moss) 35%, var(--paper))"></span><span><b class="moss">Stem · 5px.</b> The x-height, where most of a line of text lives.</span></li>
-      <li><span class="sw box" style="background: var(--soil)"></span><span><b class="soil">Soil line.</b> The baseline. Capitals sit centred between canopy and roots.</span></li>
-      <li><span class="sw box" style="background: color-mix(in srgb, var(--soil) 50%, var(--paper))"></span><span><b class="root">Roots · 3px.</b> Descenders of g, j, p, q, y.</span></li>
+      <li><span class="sw box" style="background: color-mix(in srgb, var(--sky) 35%, var(--paper))"></span><span><b class="sky">Accent space · 3px.</b> Accented capitals like <span class="moss">À</span> have room above the line.</span></li>
+      <li><span class="sw box" style="background: color-mix(in srgb, var(--sprout) 40%, var(--paper))"></span><span><b class="moss">Ascenders · 2px.</b> Capitals reach 7px above the baseline.</span></li>
+      <li><span class="sw box" style="background: color-mix(in srgb, var(--moss) 35%, var(--paper))"></span><span><b class="moss">X-height · 5px.</b> The height of most lowercase letters.</span></li>
+      <li><span class="sw box" style="background: var(--soil)"></span><span><b class="soil">Baseline.</b> Capitals sit between the accent space and descenders.</span></li>
+      <li><span class="sw box" style="background: color-mix(in srgb, var(--soil) 50%, var(--paper))"></span><span><b class="root">Descenders · 3px.</b> The tails of g, j, p, q and y.</span></li>
     </ul>
   </div>
   <div class="facts">
@@ -367,7 +367,7 @@ footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; c
 <section class="wrap plate" id="collection" aria-labelledby="col-title">
   <header class="plate-head">
     <h2 class="s4 rule-b dashed" id="col-title"><span class="sprite" data-sprite="lens" aria-hidden="true"></span> The collection</h2>
-    <p>Every specimen in the font. Pick one to study it up close.</p>
+    <p>Every glyph in the font. Select one to inspect it up close.</p>
   </header>
   <div class="collection">
     <div>
@@ -395,69 +395,67 @@ footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; c
 
 <section class="wrap plate" id="wild" aria-labelledby="wild-title">
   <header class="plate-head">
-    <h2 class="s4 rule-b dashed" id="wild-title"><span class="sprite" data-sprite="mushroom" aria-hidden="true"></span> Found in the wild</h2>
-    <p>Bitroot, observed in its natural habitats.</p>
+    <h2 class="s4 rule-b dashed" id="wild-title"><span class="sprite" data-sprite="mushroom" aria-hidden="true"></span> In use</h2>
+    <p>Bitroot in a few familiar settings.</p>
   </header>
   <div class="wild">
-<figure class="ex term"><pre class="box"><span class="g">root@bitroot</span>:<span class="c">~/garden</span>$ ls -la
-drwxr-xr-x  rio  radish/
--rw-r--r--  rio  seeds.txt    1.3K
--rwxr-xr-x  rio  water.sh      512
-<span class="g">root@bitroot</span>:<span class="c">~/garden</span>$ ./water.sh --all
-<span class="g">[ok]</span> 12 plants watered
-<span class="y">[!!]</span> fern: prefers shade
-<span class="r">[xx]</span> cactus: too much water</pre><figcaption>Terminal · 20px on dark soil.</figcaption></figure>
+<figure class="ex term"><pre class="box"><span class="g">rio@bitroot</span>:<span class="c">~/bitroot</span>$ ls -la
+drwxr-xr-x  rio  fonts/
+-rw-r--r--  rio  glyphs.json  1.3K
+-rw-r--r--  rio  metrics.txt   512
+<span class="g">rio@bitroot</span>:<span class="c">~/bitroot</span>$ python build.py
+<span class="g">[ok]</span> 181 glyphs verified
+<span class="y">[ok]</span> bitroot.ttf written
+<span class="g">[ok]</span> bitroot.woff2 written</pre><figcaption>Terminal · 20px on a dark background.</figcaption></figure>
 
-<figure class="ex packet"><pre class="box">HEIRLOOM SEED CO.        No. 013
+<figure class="ex packet"><pre class="box">BITROOT TYPE CO.         No. 013
 =================================
-PIXEL RADISH
-<i>Raphanus bitmapus</i>
+MONOSPACE PIXEL FONT
+<i>Bitroot Regular</i>
 
-Sow 1px deep, 6px apart.
-Sprouts in 13 frames.
-Harvest when crisp.
+5×13 pixel cell, 6px advance.
+181 glyphs, Latin-1 coverage.
+Sharp at every 10px step.
 
-NET WT. 35 KB        PKD FOR 2026</pre><figcaption>Seed packet · aligned by the grid alone.</figcaption></figure>
+SIL OPEN FONT LICENSE 1.1</pre><figcaption>Specimen card · aligned by the grid alone.</figcaption></figure>
 
-<figure class="ex code"><pre class="box"><span class="k">def</span> <span class="f">grow</span>(seed, water=<span class="n">3</span>):
-    <span class="s">"""Every pixel starts as a seed."""</span>
-    <span class="k">for</span> day <span class="k">in</span> <span class="f">range</span>(water):
-        seed = seed.sprout()  <span class="c"># +1px</span>
-    <span class="k">return</span> seed <span class="k">if</span> seed.alive <span class="k">else</span> <span class="n">None</span>
+<figure class="ex code"><pre class="box"><span class="k">def</span> <span class="f">pixel_size</span>(font_size):
+    <span class="s">"""One font pixel is a tenth of the size."""</span>
+    <span class="k">return</span> font_size / <span class="n">10</span>
 
-<span class="f">print</span>(<span class="f">grow</span>(radish))  <span class="c"># 0O 1lI {}</span></pre><figcaption>Code · 0/O, 1/l/I and brackets stay distinct.</figcaption></figure>
+<span class="f">print</span>(<span class="f">pixel_size</span>(<span class="n">20</span>))  <span class="c"># 0O 1lI {}</span></pre><figcaption>Code · 0/O, 1/l/I and brackets stay distinct.</figcaption></figure>
 
-<figure class="ex rpg"><pre class="box">A wild <span class="y">MANDRAKE</span> appeared!
-It looks rooted to the spot.
+<figure class="ex rpg"><pre class="box">A wild <span class="y">DRAGON</span> appeared!
+It looks ready for a challenge.
 
-  &gt; FIGHT      SEEDS
-    ROOT       RUN
+  &gt; FIGHT      ITEMS
+    MAGIC      RUN
 
   RIO   HP [========--] 42/50</pre><figcaption>Game dialogue · readable at a glance.</figcaption></figure>
 
-<figure class="ex receipt"><pre class="box">      GREENHOUSE SUPPLY
-      -----------------
-Potting soil 5kg ......  7.50
-Trowel ................  4.20
-Seeds (radish) ........  1.30
-Watering can .......... 12.00
+<figure class="ex receipt"><pre class="box">        TYPE FOUNDRY
+        ------------
+Font license ..........  0.00
+Pixel specimen ........  0.00
+Web format ............  0.00
+Desktop format ........  0.00
 ------------------------------
-TOTAL ................. 25.00
+TOTAL .................  0.00
 
-     Thank you! Grow well.</pre><figcaption>Receipt · numbers line up in columns.</figcaption></figure>
+     Thank you! Enjoy the type.</pre><figcaption>Receipt · numbers line up in columns.</figcaption></figure>
 
 <figure class="ex table"><pre class="box">+--------+-------+-------+
-| plant  | water | light |
+| glyph  | width | type  |
 +--------+-------+-------+
-| radish | 2/wk  | sun   |
-| fern   | 4/wk  | shade |
-| cactus | 1/mo  | sun   |
+| A      | 6px   | letter|
+| é      | 6px   | letter|
+| @      | 6px   | symbol|
 +--------+-------+-------+</pre><figcaption>Plain-text table · ASCII only.</figcaption></figure>
 
-<figure class="ex lang"><pre class="box">Ça pousse !  Über-grün.
-¡Qué rábano!  Smörgåsbord.
-« Les racines sont profondes. »
-Naïve façade, déjà vu. 5°C ± 2°</pre><figcaption>Latin-1 · accents in the canopy, cedillas in the roots.</figcaption></figure>
+<figure class="ex lang"><pre class="box">Ça marche !  Über alles.
+¡Qué tal!  Smörgåsbord.
+« Les pixels sont nets. »
+Naïve façade, déjà vu. 5°C ± 2°</pre><figcaption>Latin-1 · accents, cedillas and other characters.</figcaption></figure>
 
 <figure class="ex almanac"><pre class="box" id="almanac"></pre><figcaption>Calendar · this month, figures in tidy columns.</figcaption></figure>
   </div>
@@ -465,14 +463,14 @@ Naïve façade, déjà vu. 5°C ± 2°</pre><figcaption>Latin-1 · accents in th
 
 <section class="wrap plate" id="greenhouse" aria-labelledby="gh-title">
   <header class="plate-head">
-    <h2 class="s4 rule-b dashed" id="gh-title"><span class="sprite" data-sprite="greenhouse" aria-hidden="true"></span> The greenhouse</h2>
-    <p>A tiny shell for growing things. Type <b>help</b> to begin.</p>
+    <h2 class="s4 rule-b dashed" id="gh-title"><span class="sprite" data-sprite="greenhouse" aria-hidden="true"></span> Tiny shell</h2>
+    <p>A small interactive demo. Type <b>help</b> to see the commands.</p>
   </header>
   <div class="shell box" id="shell">
     <pre id="sh-out" aria-live="polite"></pre>
     <form class="line" id="sh-form" autocomplete="off">
-      <label for="sh-in" class="p">root@greenhouse:~$</label>
-      <input id="sh-in" spellcheck="false" autocapitalize="off" aria-label="Greenhouse command">
+      <label for="sh-in" class="p">rio@bitroot:~$</label>
+      <input id="sh-in" spellcheck="false" autocapitalize="off" aria-label="Shell command">
       <span class="caret" aria-hidden="true"></span>
     </form>
   </div>
@@ -480,7 +478,7 @@ Naïve façade, déjà vu. 5°C ± 2°</pre><figcaption>Latin-1 · accents in th
 
 <section class="wrap plate" id="harvest" aria-labelledby="hv-title">
   <header class="plate-head">
-    <h2 class="s4 rule-b dashed" id="hv-title"><span class="sprite" data-sprite="radish" aria-hidden="true"></span> Harvest</h2>
+    <h2 class="s4 rule-b dashed" id="hv-title"><span class="sprite" data-sprite="radish" aria-hidden="true"></span> Download</h2>
     <p>Free for any use under the SIL Open Font License 1.1.</p>
   </header>
   <div class="harvest">
@@ -634,9 +632,9 @@ canvas.addEventListener("click", () => { sprout = planSprout(++seed); drawSprout
 /* ---------- playground ---------- */
 const SAMPLES = {
   pangram: "Quiet foxes jump over blazing red maples,\nwatching dark pines sway.\n\nTHE QUICK BROWN FOX JUMPS OVER THE LAZY DOG\nthe quick brown fox jumps over the lazy dog\n0123456789 !?&@#$%*()[]{}<>+-=/\\|~^_",
-  code: "// Bitroot keeps 0/O, 1/l/I and brackets apart\nfunction grow(seed, days = 13) {\n  const garden = [];\n  for (let d = 0; d < days; d++) {\n    garden.push(seed.sprout({ water: d % 2 === 0 }));\n  }\n  return garden.filter((p) => p?.alive || p.roots > 0x1F);\n}",
-  notes: "FIELD NOTES · 24 November\n\nFound a patch of Bitroot growing between two\nterminals. Stems 5px, sprouts 7px, roots 3px.\nThe accents grow in a canopy above the capitals,\nso nothing touches the line above.\n\nCondition: crisp. Will return at 30px.",
-  accents: "Ça pousse ! Über-grün. ¡Qué rábano!\nSmörgåsbord, façade, naïve, déjà vu.\n« Les racines sont profondes. »\nÀÁÂÃÄÅ ÈÉÊË ÌÍÎÏ ÒÓÔÕÖØ ÙÚÛÜ Ñ Ç Ý\nàáâãäå èéêë ìíîï òóôõöø ùúûü ñ ç ýÿ ß",
+  code: "// Bitroot keeps 0/O, 1/l/I and brackets apart\nfunction pixelSize(fontSize) {\n  return fontSize / 10;\n}\n\nconsole.log(pixelSize(20));",
+  notes: "TYPE NOTES · 24 November\n\nA small study of Bitroot in the terminal.\nCell 5×13px, advance 6px, x-height 5px.\nAccented capitals have room above the line;\ndescenders sit neatly below the baseline.\n\nCrisp at 10, 20, 30px.",
+  accents: "Ça marche ! Über alles. ¡Qué tal!\nSmörgåsbord, façade, naïve, déjà vu.\n« Les pixels sont nets. »\nÀÁÂÃÄÅ ÈÉÊË ÌÍÎÏ ÒÓÔÕÖØ ÙÚÛÜ Ñ Ç Ý\nàáâãäå èéêë ìíîï òóôõöø ùúûü ñ ç ýÿ ß",
   glyphs: "",
 };
 const pg = $("#pg");
@@ -716,7 +714,7 @@ const say = (html) => { out.innerHTML += html + "\n"; out.scrollTop = out.scroll
 const pad9 = (s) => (s + " ".repeat(9)).slice(0, 9);
 
 function drawGarden() {
-  if (!garden.length) return say('<span class="d">The beds are empty. Try: plant radish</span>');
+  if (!garden.length) return say('<span class="d">Nothing to show. Try: plant radish</span>');
   const rows = [];
   for (let r = 0; r < 4; r++) rows.push(garden.map((g) => `<span class="m">${esc(pad9(PLANTS[g.type][g.stage][r]))}</span>`).join(" "));
   rows.push(garden.map(() => '<span class="s">~~~~~~~~~</span>').join(" "));
@@ -727,41 +725,41 @@ function drawGarden() {
 const COMMANDS = {
   help: () => say([
     '<span class="y">commands</span>',
-    "  plant &lt;seed&gt;   sow radish, fern, cactus or sunflower",
-    "  water          help everything grow a stage",
-    "  garden         look at the beds",
-    "  harvest        pick whatever is fully grown",
+    "  plant &lt;seed&gt;   add radish, fern, cactus or sunflower",
+    "  water          advance each by one stage",
+    "  garden         show the current view",
+    "  harvest        remove fully grown items",
     "  fetch          facts about this font",
     "  ls, whoami, date, clear",
   ].join("\n")),
   plant: (arg) => {
-    if (!PLANTS[arg]) return say(`<span class="r">unknown seed:</span> ${esc(arg || "(none)")}. Try radish, fern, cactus or sunflower.`);
-    if (garden.length >= 6) return say('<span class="r">the beds are full.</span> Try: harvest');
+    if (!PLANTS[arg]) return say(`<span class="r">unknown type:</span> ${esc(arg || "(none)")}. Try radish, fern, cactus or sunflower.`);
+    if (garden.length >= 6) return say('<span class="r">maximum entries reached.</span> Try: harvest');
     garden.push({ type: arg, stage: 0 });
-    say(`Sowed a ${esc(arg)} seed, 1px deep.`);
+    say(`Added ${esc(arg)}.`);
     drawGarden();
   },
   water: () => {
-    if (!garden.length) return say('<span class="d">You water bare soil. It smells nice.</span>');
+    if (!garden.length) return say('<span class="d">Nothing here to advance.</span>');
     garden.forEach((g) => (g.stage = Math.min(3, g.stage + 1)));
-    say("Watered. Things are growing.");
+    say("Advanced all entries by one stage.");
     drawGarden();
   },
   garden: drawGarden,
   harvest: () => {
     const ripe = garden.filter((g) => g.stage === 3);
-    if (!ripe.length) return say('<span class="d">Nothing is ready. Water a little more.</span>');
+    if (!ripe.length) return say('<span class="d">No fully grown entries yet.</span>');
     for (const g of ripe) garden.splice(garden.indexOf(g), 1);
-    say(`Harvested ${ripe.map((g) => g.type).join(", ")}. <span class="y">+${ripe.length * 13} crispness</span>`);
+    say(`Removed ${ripe.map((g) => g.type).join(", ")}. <span class="y">+${ripe.length * 13} crispness</span>`);
   },
-  ls: () => say(garden.length ? garden.map((g, i) => `bed-${i + 1}/  ${g.type}  stage ${g.stage}/3`).join("\n") : "seeds/  README"),
+  ls: () => say(garden.length ? garden.map((g, i) => `item-${i + 1}/  ${g.type}  stage ${g.stage}/3`).join("\n") : "items/  README"),
   whoami: () => say("root (of course)"),
   sudo: () => say("You are already root."),
-  date: () => say(new Date().toDateString() + " · good growing weather"),
-  cat: (arg) => say(arg === "README" ? "Bitroot: a monospaced pixel font, grown on a 5x13 grid.\nPlant it anywhere. Water occasionally." : `cat: ${esc(arg || "")}: no such file`),
+  date: () => say(new Date().toDateString() + " · have a good day"),
+  cat: (arg) => say(arg === "README" ? "Bitroot: a monospaced pixel font, drawn on a 5x13 grid.\nFree to use under the SIL OFL 1.1." : `cat: ${esc(arg || "")}: no such file`),
   clear: () => (out.innerHTML = ""),
   fetch: () => say([
-    `<span class="m">   \\ | /   </span>  <span class="p">root@greenhouse</span>`,
+    `<span class="m">   \\ | /   </span>  <span class="p">rio@bitroot</span>`,
     `<span class="m">    \\|/    </span>  ---------------`,
     `<span class="r">   (OOO)   </span>  <span class="y">font</span>     Bitroot ${esc(version)}`,
     `<span class="r">    'v'    </span>  <span class="y">cell</span>     5x13 px, 6px advance`,
@@ -774,11 +772,11 @@ $("#sh-form").addEventListener("submit", (e) => {
   e.preventDefault();
   const line = input.value.trim();
   input.value = "";
-  say(`<span class="p">root@greenhouse:~$</span> ${esc(line)}`);
+  say(`<span class="p">rio@bitroot:~$</span> ${esc(line)}`);
   if (!line) return;
   history.push(line); hIndex = history.length;
   const [cmd, ...rest] = line.split(/\s+/);
-  if (cmd === "rm") return say('<span class="r">Nice try.</span> The roots go deeper than that.');
+  if (cmd === "rm") return say('<span class="r">Nice try.</span> This demo keeps its files intact.');
   (COMMANDS[cmd.toLowerCase()] || (() => say(`command not found: ${esc(cmd)}. Try <span class="y">help</span>.`)))(rest.join(" ").toLowerCase());
 });
 input.addEventListener("keydown", (e) => {
@@ -794,7 +792,7 @@ const moveCaret = () => {
   $(".caret").style.setProperty("--n", Math.max(0, Math.min(input.selectionStart ?? input.value.length, fits)));
 };
 for (const ev of ["input", "keyup", "click", "focus", "select"]) input.addEventListener(ev, moveCaret);
-say('Welcome to the greenhouse. Type <span class="y">help</span>, or try <span class="y">plant cactus</span> then <span class="y">water</span> a few times.\n');
+say('Welcome to the tiny shell. Type <span class="y">help</span> to see the commands, or try <span class="y">fetch</span> for font details.\n');
 garden.push({ type: "sunflower", stage: 3 }, { type: "radish", stage: 3 }, { type: "fern", stage: 2 });
 drawGarden();
 
@@ -810,7 +808,7 @@ drawGarden();
   }));
   const weeks = [];
   for (let i = 0; i < cells.length; i += 7) weeks.push(cells.slice(i, i + 7).join(""));
-  const title = `GROWING ALMANAC · ${month} ${y}`;
+  const title = `BITROOT ALMANAC · ${month} ${y}`;
   $("#almanac").innerHTML = [
     title,
     "-".repeat(title.length),
