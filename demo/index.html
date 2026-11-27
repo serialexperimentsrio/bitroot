@@ -213,15 +213,15 @@ a:hover { background: var(--ink); color: var(--paper); text-decoration: none; }
 .ex.almanac .today { background: var(--moss); color: var(--paper); } .ex.almanac .wk { color: var(--root); }
 
 /* ---------- greenhouse shell ---------- */
-.shell { background: #0c1209; color: #cfe8c4; padding: var(--r) calc(var(--c) * 2); }
-.shell pre { font: inherit; white-space: pre-wrap; height: calc(var(--r) * 16); overflow-y: auto; }
+.shell { height: calc(var(--r) * 19); background: #0c1209; color: #cfe8c4; padding: var(--r) calc(var(--c) * 2); }
+.shell pre { font: inherit; white-space: pre-wrap; max-height: calc(var(--r) * 16); margin-bottom: 0; overflow-y: auto; }
 .shell pre::-webkit-scrollbar { width: var(--c); background: #0c1209; }
 .shell pre::-webkit-scrollbar-thumb { background: #2c3a26; }
 .shell .line { display: flex; column-gap: var(--c); }
 .shell input { flex: 1; min-width: 0; width: 0; height: var(--r); font: inherit; color: inherit; background: transparent; border: 0; outline: 0; padding: 0; caret-color: transparent; }
 .shell .line { position: relative; }
-/* block cursor: one character cell after the prompt (18 characters and a space) */
-.caret { position: absolute; top: 0; left: calc(var(--c) * (19 + var(--n, 0))); width: var(--c); height: var(--r); background: #7dff8a; mix-blend-mode: difference; pointer-events: none; animation: blink 1s steps(1) infinite; }
+/* block cursor: one character cell after the 14-character prompt */
+.caret { position: absolute; top: 0; left: calc(var(--c) * (15 + var(--n, 0))); width: var(--c); height: var(--r); background: #7dff8a; mix-blend-mode: difference; pointer-events: none; animation: blink 1s steps(1) infinite; }
 .shell:not(:focus-within) .caret { background: none; outline: var(--bo) solid #7dff8a; outline-offset: calc(var(--bo) * -1); mix-blend-mode: normal; animation: none; }
 @keyframes blink { 50% { opacity: 0; } }
 .shell .p { color: #7dff8a; } .shell .m { color: #8fbc6a; } .shell .r { color: #e6824f; } .shell .s { color: #b07b4d; } .shell .y { color: #ffd166; } .shell .d { color: #7d8a74; }
@@ -463,7 +463,7 @@ Naïve façade, déjà vu. 5°C ± 2°</pre><figcaption>Latin-1 · accents, cedi
 
 <section class="wrap plate" id="greenhouse" aria-labelledby="gh-title">
   <header class="plate-head">
-    <h2 class="s4 rule-b dashed" id="gh-title"><span class="sprite" data-sprite="greenhouse" aria-hidden="true"></span> Tiny shell</h2>
+    <h2 class="s4 rule-b dashed" id="gh-title"><span class="sprite" data-sprite="greenhouse" aria-hidden="true"></span> Greenhouse shell</h2>
     <p>A small interactive demo. Type <b>help</b> to see the commands.</p>
   </header>
   <div class="shell box" id="shell">
